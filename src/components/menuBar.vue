@@ -110,7 +110,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 #menu {
   margin: 0px;
   padding: 0px;

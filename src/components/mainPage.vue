@@ -4,7 +4,7 @@
     <appHeader id="header"></appHeader>
     <el-container direction="horizontal" class="common container-sub">
         <viewerPanel></viewerPanel>
-      <el-aside id="aside" class="common">
+      <el-aside id="aside">
         <controlPanel></controlPanel>
       </el-aside>
     </el-container>
@@ -26,7 +26,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .common {
   margin: 0px !important;
   border: 0px !important;
@@ -41,6 +41,7 @@ export default {
 .container-sub {
   height: calc(100vh - 30px);
   width: 100vw;
+  overflow: auto;
 }
 
 #header {
@@ -49,6 +50,12 @@ export default {
 }
 
 #aside {
+  margin: 0px;
+  border-top: 0px;
+  border-left: 1px solid #DCDFE6;
+  border-right: 1px solid #DCDFE6;
+  border-bottom: 1px solid #DCDFE6;
+  padding: 0px;
   height: 100%;
   width: 30%;
   overflow: auto;

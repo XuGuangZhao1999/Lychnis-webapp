@@ -70,9 +70,6 @@ window.onload = function() {
 
 <style scoped>
 div {
-    margin: 0px;
-    border: 0px;
-    padding: 0px;
     width: 100%;
     height: calc(100vh - 30px);
 }
@@ -92,7 +89,10 @@ div {
 
 .flexLayout {
     margin: 0px;
-    border: 0px;
+    border-top: 1px solid #DCDFE6;
+    border-left: 0px;
+    border-right: 0px;
+    border-bottom: 1px solid #DCDFE6;
     padding: 0px;
     display: flex;
     justify-content: center;

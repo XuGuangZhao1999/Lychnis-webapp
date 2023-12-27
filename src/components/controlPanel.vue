@@ -1,6 +1,6 @@
 <template>
     <el-tabs id="tabs" type="border-card" stretch="true">
-        <el-tab-pane label="标注">
+        <el-tab-pane label="标注通道">
             <el-collapse>
                 <el-collapse-item title="设置" name="1">
                     <el-form label-position="right">
@@ -167,10 +167,16 @@ export default {
     padding: 0px;
 }
 
+#seniorBtn {
+    float: right !important; 
+    font-size: 14px;
+}
+
 .el-tabs__item {
     background-color: #545C64 !important;
     color: white !important;
     border-top: 2px solid #FFFFFF !important;
+    border-bottom: 1px solid #FFFFFF !important;
 }
 
 .el-tabs__item.is-active {
@@ -187,8 +193,9 @@ export default {
     padding: 0px !important;
 }
 
-#seniorBtn {
-    float: right !important; 
-    font-size: 14px;
+.el-collapse-item__header {
+    background-color: #7D8590 !important;
+    color: white !important;
 }
+
 </style>
