@@ -173,19 +173,19 @@ export default {
 }
 
 .el-tabs__item {
-    background-color: #545C64 !important;
+    background-color: #7D8590 !important;
     color: white !important;
     border-top: 2px solid #FFFFFF !important;
     border-bottom: 1px solid #FFFFFF !important;
 }
 
 .el-tabs__item.is-active {
-    background-color: #7D8590 !important;
+    background-color: #545C64 !important;
     border-top: 2px solid #409EFF !important;
 }
 
 .el-tabs__content {
-    background-color: #7D8590 !important;
+    background-color: #545C64 !important;
     color: white !important;
     height: calc(100% - 40px) !important;
     margin: 0px !important;
@@ -194,8 +194,30 @@ export default {
 }
 
 .el-collapse-item__header {
-    background-color: #7D8590 !important;
+    background-color: #545C64 !important;
     color: white !important;
+    justify-content: space-between !important;
+    height: 35px !important;
+}
+
+.el-collapse-item__content {
+    background-color: #7D8590;
+}
+
+.el-form {
+    background-color: #7D8590;
+}
+
+.el-form-item {
+    background-color: #7D8590;
+}
+
+.el-form-item__label {
+    color:white !important;
+}
+
+.el-table {
+    background-color: #545C64;
 }
 
 </style>
