@@ -78,10 +78,12 @@ export default {
   },
   setup() {
     function renderImageToCanvas(img){
-      let canvas = document.getElementById("imageContainer")
-      let ctx = canvas.getContext("2d")
+      img.onload = function() {
+        let canvas = document.getElementById("imageContainer")
+        let ctx = canvas.getContext("2d")
 
-      ctx.drawImage(img, 0, 0)
+        ctx.drawImage(img, 0, 0)
+      }
     }
 
     function loadProject() {
@@ -93,7 +95,7 @@ export default {
           let img = new Image()
           img.src = "data:image/jpg;base64," + base64_image
 
-          img.onload = renderImageToCanvas(img) 
+          renderImageToCanvas(img)
         },
         onFailure: function(error_code, error_message) {
           // Load project failed, output error message to console.
