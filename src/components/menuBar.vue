@@ -70,6 +70,7 @@
 <script>
 /*eslint-disable*/
 import statusBar from './statusBar.vue'
+import { paintCanvas } from '../assets/js/canvasCom.js'
 
 export default {
   name: 'menuBar',
@@ -77,25 +78,12 @@ export default {
     statusBar
   },
   setup() {
-    function renderImageToCanvas(img){
-      img.onload = function() {
-        let canvas = document.getElementById("imageContainer")
-        let ctx = canvas.getContext("2d")
-
-        ctx.drawImage(img, 0, 0)
-      }
-    }
-
     function loadProject() {
       window.cefQuery({
         request: "loadProject",
         onSuccess: function(response) {
-          // Render image to canvas.
-          let base64_image = response
-          let img = new Image()
-          img.src = "data:image/jpg;base64," + base64_image
-
-          renderImageToCanvas(img)
+          // Load project success, paint response data to canvas.
+          paintCanvas(response);
         },
         onFailure: function(error_code, error_message) {
           // Load project failed, output error message to console.
@@ -106,7 +94,7 @@ export default {
     
     return {
       loadProject,
-      renderImageToCanvas
+      // renderImageToCanvas
     }
   },
 }
