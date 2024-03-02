@@ -70,7 +70,7 @@
 <script>
 /*eslint-disable*/
 import statusBar from './statusBar.vue'
-import { paintCanvas } from '../assets/js/canvasCom.js'
+// import { paintCanvas } from '../assets/js/canvasCom.js'
 
 export default {
   name: 'menuBar',
@@ -83,7 +83,8 @@ export default {
         request: "loadProject",
         onSuccess: function(response) {
           // Load project success, paint response data to canvas.
-          paintCanvas(response);
+          // paintCanvas(response);
+          console.log("loadProject success: " + response);
         },
         onFailure: function(error_code, error_message) {
           // Load project failed, output error message to console.
