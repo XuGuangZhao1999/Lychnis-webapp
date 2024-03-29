@@ -13,7 +13,7 @@ const coreModel = {
     namespaced: true,
     state() {
         return {
-            language: "zhCn",
+            language: "en",
             I18N: i18n
         }
     },
