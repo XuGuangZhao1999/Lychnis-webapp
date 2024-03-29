@@ -1,6 +1,8 @@
 <!-- The main component and page entry file of the Vue project. -->
 <template>
-  <mainPage/>
+  <el-config-provider v-bind:locale="this.$store.state.core.locale">
+    <mainPage/>
+  </el-config-provider>
 </template>
 
 <script>

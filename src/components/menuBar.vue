@@ -1,11 +1,11 @@
 <template>
   <!-- Menu bar -->
-  <el-menu id="menu" mode="horizontal" background-color="#545C64" text-color="#FFFFFF">
+  <el-menu id="menu" mode="horizontal" background-color="#313131" text-color="#FFFFFF">
     <el-sub-menu index="1">
-      <template #title>文件</template>
+      <template #title>{{ $t('file.title') }}</template>
       <el-menu-item id="loadProject" index="1-1" v-on:click="loadProject()">加载工程文件</el-menu-item>
-      <el-menu-item index="1-2">保存工程</el-menu-item>
-      <el-menu-item index="1-3">工程另存为...</el-menu-item>
+      <el-menu-item index="1-2">{{ $t('file.save') }}</el-menu-item>
+      <el-menu-item index="1-3">{{ $t('file.saveAs') }}</el-menu-item>
       <el-divider class="hLine"/>
       <el-menu-item index="1-4">打开图像文件</el-menu-item>
       <el-menu-item index="1-5">以sps形式打开图像</el-menu-item>
@@ -54,15 +54,15 @@
     </el-sub-menu>
     <el-sub-menu index="4">
       <template #title>帮助</template>
-      <el-menu-item index="4-1" id="debug" v-on:click="deBug()">关于</el-menu-item>
+      <el-menu-item index="4-1" id="debug" v-on:click="this.$store.commit('status/showMessage', 'This is a debug message.')">关于</el-menu-item>
       <el-sub-menu index="4-2">
         <template #title>语言</template>
-        <el-menu-item index="4-2-1">简体中文</el-menu-item>
-        <el-menu-item index="4-2-2">English</el-menu-item>
+        <el-menu-item index="4-2-1" @click="changeLanguage('zhCn')">简体中文</el-menu-item>
+        <el-menu-item index="4-2-2" @click="changeLanguage('en')">English</el-menu-item>
       </el-sub-menu>
     </el-sub-menu>
     <el-menu-item index="5">
-      <statusBar status="Status" bShow="true"></statusBar>
+      <statusBar></statusBar>
     </el-menu-item>
   </el-menu>
 </template>
@@ -70,6 +70,7 @@
 <script>
 /*eslint-disable*/
 import statusBar from './statusBar.vue'
+import { useStore } from 'vuex'
 // import { paintCanvas } from '../assets/js/canvasCom.js'
 
 export default {
@@ -78,6 +79,8 @@ export default {
     statusBar
   },
   setup() {
+    const store = useStore()
+
     function loadProject() {
       window.cefQuery({
         request: "loadProject",
@@ -92,9 +95,21 @@ export default {
         }
       })
     }
+
+    function changeLanguage(lang) {
+      store.commit('core/setLanguage', lang);
+      store.commit('core/setI18N', lang);
+    }
+
+    // function deBug() {
+    //   this.$store.commit('status/showMessage', 'This is a debug message.');
+    // }
     
     return {
       loadProject,
+      changeLanguage,
+      store
+      // deBug
       // renderImageToCanvas
     }
   },
@@ -111,6 +126,10 @@ export default {
 
 .hLine {
   margin: 0px !important;
+}
+
+:deep(:root) {
+    --el-menu-active-color: #f88070;
 }
 
 </style>

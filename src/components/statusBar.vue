@@ -1,15 +1,20 @@
 <template>
     <!-- Status bar -->
-    <label id="statusBar" v-if='bShow'>{{ status }}</label>
+    <label id="statusBar" v-if="store.state.status.bShow">{{ store.state.status.message }}</label>
 </template>
 
 <script>
+import { useStore } from 'vuex'
+
 export default {
-    name: 'statusBar',
-    props: {
-        status: String,
-        bShow: Boolean
-    }
+    setup() {
+        const store = useStore()
+
+        return {
+            store
+        }
+    },
+    name: 'statusBar'
 }
 </script>
 
@@ -19,7 +24,7 @@ export default {
     margin: 0px;
     padding: 0px;
     border: 0px;
-    background-color: #545C64;
+    background-color: #313131;
     color: greenyellow;
     font-size: 18px;
     height: 30px;
