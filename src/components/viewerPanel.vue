@@ -1,20 +1,28 @@
+<!-- Viewer panel -->
 <template>
     <div class="flexLayout">
+        <el-slider v-if="store.state.core.bLoaded" range show-stops :max="100"/>
         <canvas id="imageContainer" ref="canvas" v-if='bShow' width="1600" height="1200"></canvas>
+        <el-slider v-if="store.state.core.bLoaded" v-model="level" show-input="true" :max="6"/>
     </div>
 </template>
 
 <script>
 import { ref } from 'vue'
+import { useStore } from 'vuex'
 
 export default {
     name: 'viewerPanel',
     setup() {
+        const store = useStore()
         const bShow = ref(true)
+        const level = ref(0)
         // const bMouse = ref(false)
 
         return {
+            store,
             bShow,
+            level
             // bMouse
         }
     },
@@ -95,6 +103,7 @@ div {
     border-bottom: 1px solid #DCDFE6;
     padding: 0px;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     width: 100%;

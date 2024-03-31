@@ -1,5 +1,5 @@
+<!-- Menu bar -->
 <template>
-  <!-- Menu bar -->
   <el-menu id="menu" mode="horizontal" background-color="#313131" text-color="#FFFFFF">
     <fileMenu :index="1"></fileMenu>
     <editMenu :index="2"></editMenu>

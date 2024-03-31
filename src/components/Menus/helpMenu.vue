@@ -26,7 +26,7 @@ export default {
     function about() {
       let info = "Lychnis is a fiber-tracing tool for volumetric data.<br/>" + 
                  "Developed and maintained by SMART/VISoR team (at SIAT and USTC).<br/>" +
-                 "Contact: dinglufe@gmail.com"
+                 "Contact: <a href='mailto:dinglufe@gmail.com'>dinglufe@gmail.com</a>"
                   
       ElMessageBox.alert(info, 'About', {
         confirmButtonText: 'OK',

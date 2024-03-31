@@ -1,5 +1,5 @@
+<!-- Status bar -->
 <template>
-    <!-- Status bar -->
     <label id="statusBar" v-if="store.state.status.bShow">{{ store.state.status.message }}</label>
 </template>
 

@@ -14,7 +14,8 @@ const coreModel = {
     state() {
         return {
             language: "en",
-            I18N: i18n
+            I18N: i18n,
+            bLoaded: false
         }
     },
     mutations: {
@@ -25,6 +26,10 @@ const coreModel = {
         // Set the language of the i18n
         setI18N(state, lang) {
             state.I18N.global.locale = lang
+        },
+        // Set whether the file is loaded
+        setBLoaded(state, b) {
+            state.bLoaded = b
         }
     },
     getters: {
