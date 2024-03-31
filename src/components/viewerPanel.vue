@@ -107,7 +107,7 @@ div {
     justify-content: center;
     align-items: center;
     width: 100%;
-    height: auto;
+    height: 100%;
     object-fit: contain;
     background-color: #000000;
 }

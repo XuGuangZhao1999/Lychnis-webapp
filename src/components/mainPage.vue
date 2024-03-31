@@ -2,12 +2,21 @@
 <template>
   <el-container direction="vertical" class="common container-top">
     <appHeader id="header"></appHeader>
-    <el-container direction="horizontal" class="common container-sub">
+    <div class="split">
+      <div id="split-0">
+        <viewerPanel></viewerPanel>
+      </div>
+      <div id="split-1">
+        <controlPanel></controlPanel>
+      </div>
+    </div>
+
+    <!-- <el-container direction="horizontal" class="common container-sub">
         <viewerPanel></viewerPanel>
       <el-aside id="aside">
         <controlPanel></controlPanel>
       </el-aside>
-    </el-container>
+    </el-container> -->
   </el-container>
 </template>
 
@@ -15,6 +24,7 @@
 import appHeader from './appHeader.vue'
 import controlPanel from './controlPanel.vue'
 import viewerPanel from './viewerPanel.vue'
+import Split from 'split.js'
 
 export default {
   name: 'mainPage',
@@ -23,10 +33,30 @@ export default {
     controlPanel,
     viewerPanel,
   },
+  mounted() {
+    Split(['#split-0', '#split-1'], {
+      sizes: [70, 30],
+      minSize: 300,
+      gutterSize: 2,
+      direction: 'horizontal',
+      cursor: 'col-resize',
+      onDrag: function() {
+        window.requestAnimationFrame(() => {
+        })
+      }
+    })
+  },
 }
 </script>
 
 <style scoped>
+.split {
+    display: flex;
+    flex-direction: row;
+    height: calc(100vh - 30px);
+    width: 100vw;
+}
+
 .common {
   margin: 0px !important;
   border: 0px !important;
