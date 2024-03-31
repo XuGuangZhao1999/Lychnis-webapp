@@ -1,17 +1,25 @@
 <!-- The main component and page entry file of the Vue project. -->
 <template>
-  <el-config-provider v-bind:locale="this.$store.state.core.locale">
+  <el-config-provider :locale="store.getters['core/locale']">
     <mainPage/>
   </el-config-provider>
 </template>
 
 <script>
 import mainPage from './components/mainPage.vue'
+import { useStore } from 'vuex';
 
 export default {
   name: 'App',
   components: {
     mainPage
+  },
+  setup() {
+    const store = useStore();
+
+    return {
+      store
+    }
   }
 }
 </script>

@@ -1,6 +1,6 @@
 <template>
     <el-tabs id="tabs" type="border-card" stretch="true">
-        <el-tab-pane label="标注通道">
+        <el-tab-pane :label="$t('annotation.title')">
             <el-collapse>
                 <el-collapse-item title="设置" name="1">
                     <el-form label-position="right">
@@ -88,7 +88,7 @@
                 </el-collapse-item>
             </el-collapse>
         </el-tab-pane>
-        <el-tab-pane label="动画">
+        <el-tab-pane :label="$t('animation.title')">
             <el-collapse>
                 <el-collapse-item title="关键帧" name="5">
                     <template v-slot:title>
