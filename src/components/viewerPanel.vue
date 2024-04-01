@@ -1,28 +1,46 @@
 <!-- Viewer panel -->
 <template>
     <div class="flexLayout">
-        <el-slider v-if="store.state.core.bLoaded" range show-stops :max="100"/>
-        <canvas id="imageContainer" ref="canvas" v-if='bShow' width="1600" height="1200"></canvas>
-        <el-slider v-if="store.state.core.bLoaded" v-model="level" show-input="true" :max="6"/>
+        <el-slider v-if="store.state.core.bLoaded" v-model="tempRange" @change="updateRange" @input="noop" range show-stops :max="65535"/>
+        <div class="wrapper">
+            <canvas id="imageContainer" ref="canvas" v-if='bShow' width="1600" height="1200"></canvas>
+        </div>
+        <el-slider v-if="store.state.core.bLoaded" v-model="currentLevel" show-input="true" :debounce="100" :max="store.state.core.levels"/>
     </div>
 </template>
 
 <script>
 import { ref } from 'vue'
 import { useStore } from 'vuex'
+import  _  from 'lodash'
 
 export default {
     name: 'viewerPanel',
     setup() {
         const store = useStore()
         const bShow = ref(true)
-        const level = ref(0)
+        const currentLevel = ref(store.state.core.levels - 1)
+        const range = ref([100, 1000])
+        const tempRange = ref([...range.value])
+        // const rafId = ref(null)
         // const bMouse = ref(false)
+
+        const updateRange = _.debounce(function(newRange) {
+            range.value = newRange
+        }, 100)
+
+        function noop() {
+
+        }
 
         return {
             store,
             bShow,
-            level
+            currentLevel,
+            range,
+            tempRange,
+            updateRange,
+            noop
             // bMouse
         }
     },
@@ -78,8 +96,19 @@ window.onload = function() {
 
 <style scoped>
 div {
+    margin: 0px;
+    border: 0px;
+    padding: 0px;
     width: 100%;
     height: calc(100vh - 30px);
+}
+
+.wrapper {
+    margin: 0px;
+    border: 0px;
+    padding: 0px;
+    width: 100%;
+    height: calc(100% - 80px);
 }
 
 #imageContainer {
@@ -90,7 +119,7 @@ div {
     width: calc(100% - 4px);
     height: calc(100% - 4px); */
     width: auto;
-    height: auto;
+    height: 100%;
     max-width: 100%;
     max-height: 100%;
 }
@@ -110,5 +139,11 @@ div {
     height: 100%;
     object-fit: contain;
     background-color: #000000;
+}
+
+.el-slider {
+    width: 100%;
+    height: 40px;
+    background-color: #313131;
 }
 </style>

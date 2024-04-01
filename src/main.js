@@ -15,7 +15,12 @@ const coreModel = {
         return {
             language: "en",
             I18N: i18n,
-            bLoaded: false
+            bLoaded: false,
+            levels: 7,
+            range: {
+                min: 0,
+                max: 0
+            },
         }
     },
     mutations: {
@@ -30,7 +35,11 @@ const coreModel = {
         // Set whether the file is loaded
         setBLoaded(state, b) {
             state.bLoaded = b
-        }
+        },
+        // Set the image levels
+        setLevels(state, levels) {
+            state.levels = levels
+        },
     },
     getters: {
         locale(state) {

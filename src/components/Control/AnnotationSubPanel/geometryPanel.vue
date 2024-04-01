@@ -1,8 +1,11 @@
 <template>
     <el-collapse-item :name="name">
         <template v-slot:title>
-            <span>{{ $t('annotation.geometry.title') }}</span>
-            <el-button id="seniorBtn" type="text">{{ $t('annotation.geometry.advanced') }}</el-button>
+            <div class="container">
+                <span>{{ $t('annotation.geometry.title') }}</span>
+                <!-- <button id="seniorBtn">{{ $t('annotation.geometry.advanced') }}</button> -->
+                <el-button id="seniorBtn" type="text">{{ $t('annotation.geometry.advanced') }}</el-button>
+            </div>
         </template>
         <el-form label-position="right">
             <el-form-item :label="$t('annotation.geometry.block_size')">
@@ -36,6 +39,9 @@ export default {
 }
 </script>
 
-<style>
-
+<style scoped>
+#seniorBtn {
+    border: 0px;
+    padding: 0px;
+}
 </style>

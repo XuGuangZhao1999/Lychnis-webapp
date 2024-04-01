@@ -33,9 +33,15 @@ export default {
     padding: 0px;
 }
 
-#seniorBtn {
-    float: right !important; 
-    font-size: 14px;
+.container {
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+span {
+    display: flex;
+    align-items: center;
 }
 
 .el-tabs__item {
