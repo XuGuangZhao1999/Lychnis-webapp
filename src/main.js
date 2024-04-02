@@ -15,7 +15,7 @@ const coreModel = {
         return {
             language: "en",
             I18N: i18n,
-            bLoaded: false,
+            bLoaded: true,
             levels: 7,
             range: {
                 min: 0,
