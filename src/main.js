@@ -16,10 +16,10 @@ const coreModel = {
             language: "en",
             I18N: i18n,
             bLoaded: true,
-            levels: 7,
-            range: {
-                min: 0,
-                max: 0
+            levels: 1,
+            constrastRange: {
+                lower: 100,
+                upper: 1000,
             },
         }
     },
@@ -40,6 +40,11 @@ const coreModel = {
         setLevels(state, levels) {
             state.levels = levels
         },
+        // Set the constrast range
+        setConstrastRange(state, range) {
+            state.constrastRange.lower = range.lower
+            state.constrastRange.upper = range.upper
+        }
     },
     getters: {
         locale(state) {
@@ -97,6 +102,10 @@ window.paint = function(imageBinary) {
 // Show message
 window.showMessage = function(message) {
     store.commit("status/showMessage", message)
+}
+
+window.showConstrast = function() {
+    console.log(store.state.core.constrastRange)
 }
 
 // Create app instance
