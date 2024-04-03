@@ -1,9 +1,14 @@
 <template>
-    <el-collapse-item :title="$t('annotation.selected_node.title')" :name="name">
-        <el-form label-position="right">
+    <el-card>
+        <template #header>
+            <span>{{ $t('annotation.selected_node.title') }}</span>
+        </template>
+        <el-form label-position="left" label-width="auto" size="small" style="min-width: 300px;">
             <el-form-item :label="$t('annotation.selected_node.node_id')">
-                <el-input></el-input>
-                <el-input placeholder="搜索的节点编号"></el-input>
+                <div style="display: flex; flex-direction: row;">
+                    <el-input></el-input>
+                    <el-input placeholder="搜索的节点编号"></el-input>
+                </div>
             </el-form-item>
             <el-form-item :label="$t('annotation.selected_node.node_type')">
                 <el-select>
@@ -11,23 +16,27 @@
                 </el-select>
             </el-form-item>
             <el-form-item :label="$t('annotation.selected_node.message')">
-                <el-input placeholder="输入完成后按回车键"></el-input>
-                <el-select>
-                    <el-option label="Sure" value="1"/>
-                </el-select>
+                <div style="display: flex; flex-direction: row;">
+                    <el-input placeholder="输入完成后按回车键"></el-input>
+                    <el-select>
+                        <el-option label="Sure" value="1"/>
+                    </el-select>
+                </div>
             </el-form-item>
             <el-form-item :label="$t('annotation.selected_node.creator')">
                 <el-input type="text"></el-input>
             </el-form-item>
             <el-form-item :label="$t('annotation.selected_node.color')">
-                <el-input type="text"></el-input>
-                <el-color-picker v-model="nodeColor"/>
+                <div style="display: flex;">
+                    <el-input type="text"></el-input>
+                    <el-color-picker v-model="nodeColor"/>
+                </div>
             </el-form-item>
             <el-form-item :label="$t('annotation.selected_node.coordinate')">
                 <el-input type="text"></el-input>
             </el-form-item>
         </el-form>
-    </el-collapse-item>
+    </el-card>
 </template>
 
 <script>

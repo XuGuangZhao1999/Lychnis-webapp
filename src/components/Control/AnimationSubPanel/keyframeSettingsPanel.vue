@@ -1,11 +1,15 @@
 <template>
-    <el-collapse-item :name="name">
-        <template v-slot:title>
-            <span>{{ $t('animation.keyframe.title') }}</span>
-            <el-button id="seniorBtn" type="text">{{ $t('animation.keyframe.new') }}</el-button>
-            <el-button id="seniorBtn" type="text">{{ $t('animation.keyframe.modify') }}</el-button>
+    <el-card>
+        <template #header>
+            <div style="display: flex; justify-content: space-between;">
+                <span>{{ $t('animation.keyframe.title') }}</span>
+                <div>
+                    <el-button id="seniorBtn" type="text">{{ $t('animation.keyframe.new') }}</el-button>
+                    <el-button id="seniorBtn" type="text">{{ $t('animation.keyframe.modify') }}</el-button>
+                </div>
+            </div>
         </template>
-        <el-form label-position="right">
+        <el-form label-position="left" label-width="auto" size="small" style="min-width: 300px;">
             <el-form-item :label="$t('animation.keyframe.index_keyframes')">
                 <el-input></el-input>
             </el-form-item>
@@ -22,7 +26,7 @@
                 <el-input></el-input>
             </el-form-item>
         </el-form>
-    </el-collapse-item>
+    </el-card>
 </template>
 
 <script>

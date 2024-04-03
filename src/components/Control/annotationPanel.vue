@@ -1,12 +1,12 @@
 <!-- Annotation panel -->
 <template>
     <el-tab-pane :label="$t('annotation.title')">
-        <el-collapse>
-            <settingsPanel :name="1"></settingsPanel>
-            <geometryPanel :name="2"></geometryPanel>
-            <currentNodeInfoPanel :name="3"></currentNodeInfoPanel>
-            <specialNodePanel :name="4"></specialNodePanel>
-        </el-collapse>
+        <div style="display: flex; flex-direction: column; height: 100%;">
+            <settingsPanel></settingsPanel>
+            <geometryPanel></geometryPanel>
+            <currentNodeInfoPanel></currentNodeInfoPanel>
+            <specialNodePanel></specialNodePanel>
+        </div>
     </el-tab-pane>
 </template>
 

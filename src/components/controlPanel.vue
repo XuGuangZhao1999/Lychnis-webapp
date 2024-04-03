@@ -44,11 +44,20 @@ span {
     align-items: center;
 }
 
-.el-tabs__item {
+.el-tabs__item{
     background-color: #313131 !important;
     color: white !important;
     border-top: 2px solid #FFFFFF !important;
     border-bottom: 1px solid #FFFFFF !important;
+
+}
+
+.el-card {
+    background-color: #313131 !important;
+    color: white !important;
+    --el-card-padding: 0px !important;
+    /* border-top: 2px solid #FFFFFF !important;
+    border-bottom: 1px solid #FFFFFF !important; */
 }
 
 .el-tabs__item.is-active {
@@ -86,6 +95,10 @@ span {
 
 .el-form-item__label {
     color:white !important;
+}
+
+.el-form-item--small{
+    margin-bottom: 1px !important;
 }
 
 .el-table {

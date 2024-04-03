@@ -1,6 +1,9 @@
 <template>
-    <el-collapse-item :title="$t('annotation.settings.title')" :name="name">
-        <el-form label-position="right">
+    <el-card shadow="never">
+        <template #header>
+            <span>{{ $t('annotation.settings.title') }}</span>
+        </template>
+        <el-form label-position="left" label-width="auto" size="small" style="min-width: 300px;">
             <el-form-item :label="$t('annotation.settings.annotation_channel')">
                 <el-select>
                     <el-option label="通道1" value="1"/>
@@ -22,16 +25,14 @@
                 <el-input></el-input>
             </el-form-item>
         </el-form>
-    </el-collapse-item>
+    </el-card>
 </template>
 
 <script>
 export default {
     name: 'settingsPanel',
     props: {
-        name: {
-            type: String
-        }
+
     },
     setup() {
         return {

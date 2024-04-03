@@ -1,9 +1,12 @@
 <template>
-    <el-collapse-item :title="$t('animation.all_frames.title')" :name="name">
+    <el-card>
+        <template #header>
+            <span>{{ $t('animation.all_frames.title') }}</span>
+        </template>
         <el-slider v-model="frameIndex" show-input size="small"/>
         <el-button type="text">{{ $t('animation.all_frames.previous_keyframe') }}</el-button>
         <el-button type="text">{{ $t('animation.all_frames.next_keyframe') }}</el-button>
-    </el-collapse-item>
+    </el-card>
 </template>
 
 <script>

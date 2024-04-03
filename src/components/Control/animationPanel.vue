@@ -1,11 +1,11 @@
 <template>
     <el-tab-pane :label="$t('animation.title')">
-        <el-collapse>
+        <div style="display: flex; flex-direction: column; height: 100%;">
             <keyframeSettingsPanel :name="5"></keyframeSettingsPanel>
             <allKeyfamesPanel :name="6"></allKeyfamesPanel>
             <allFramesPanel :name="7"></allFramesPanel>
             <scriptPanel :name="8"></scriptPanel>
-        </el-collapse>
+        </div>
     </el-tab-pane>
 </template>
 
