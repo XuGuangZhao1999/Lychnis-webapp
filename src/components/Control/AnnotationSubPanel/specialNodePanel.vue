@@ -3,8 +3,10 @@
         <template #header>
             <div style="display: flex; justify-content: space-between;">
                 <span>{{ $t('annotation.special_nodes.title') }}</span>
-                <el-button id="seniorBtn" type="text">{{ $t('annotation.special_nodes.filter') }}</el-button>
-                <el-button id="seniorBtn" type="text">{{ $t('annotation.special_nodes.pop') }}</el-button>
+                <div>
+                    <el-button id="seniorBtn" type="text">{{ $t('annotation.special_nodes.filter') }}</el-button>
+                    <el-button id="seniorBtn" type="text">{{ $t('annotation.special_nodes.pop') }}</el-button>
+                </div>
             </div>
         </template>
         <el-table border>

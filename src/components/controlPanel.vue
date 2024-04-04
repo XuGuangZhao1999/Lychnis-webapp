@@ -44,12 +44,37 @@ span {
     align-items: center;
 }
 
+.el-table {
+    background-color: #3c3c3c !important;
+}
+
+.el-table th.el-table__cell {
+    background-color: #3c3c3c !important;
+}
+
+.el-table thead {
+    color: white !important;
+}
+
 .el-tabs__item{
-    background-color: #313131 !important;
+    background-color: #3c3c3c !important;
     color: white !important;
     border-top: 2px solid #FFFFFF !important;
     border-bottom: 1px solid #FFFFFF !important;
+}
 
+.el-tabs__item.is-active {
+    background-color: #313131 !important;
+    border-top: 2px solid #f88070 !important;
+}
+
+.el-tabs__content {
+    background-color: #313131 !important;
+    color: white !important;
+    height: calc(100% - 40px) !important;
+    margin: 0px !important;
+    border: 0px !important;
+    padding: 0px !important;
 }
 
 .el-card {
@@ -58,31 +83,6 @@ span {
     --el-card-padding: 0px !important;
     /* border-top: 2px solid #FFFFFF !important;
     border-bottom: 1px solid #FFFFFF !important; */
-}
-
-.el-tabs__item.is-active {
-    background-color: #3c3c3c !important;
-    border-top: 2px solid #f88070 !important;
-}
-
-.el-tabs__content {
-    background-color: #3c3c3c !important;
-    color: white !important;
-    height: calc(100% - 40px) !important;
-    margin: 0px !important;
-    border: 0px !important;
-    padding: 0px !important;
-}
-
-.el-collapse-item__header {
-    background-color: #3c3c3c !important;
-    color: white !important;
-    justify-content: space-between !important;
-    height: 35px !important;
-}
-
-.el-collapse-item__content {
-    background-color: #313131;
 }
 
 .el-form {
@@ -101,8 +101,20 @@ span {
     margin-bottom: 1px !important;
 }
 
+.el-input__wrapper {
+    background-color: #313131 !important;
+}
+
+.el-input__inner {
+    color: white !important;
+}
+
 .el-table {
     background-color: #3c3c3c;
+}
+
+span.el-table__empty-text {
+    justify-content: center;
 }
 
 </style>

@@ -5,16 +5,12 @@
         </template>
         <el-form label-position="left">
             <el-form-item>
-                <div style="display: flex;">
-                    <el-input></el-input>
-                    <el-button type="text">{{ $t('animation.script.browse') }}</el-button>
-                </div>
+                <el-input/>
+                <el-button type="text">{{ $t('animation.script.browse') }}</el-button>
             </el-form-item>
-            <el-form-item>
-                <el-button type="text">{{ $t('animation.script.export_template') }}</el-button>
-                <el-button type="text">{{ $t('animation.script.reload') }}</el-button>
-                <el-button type="text">{{ $t('animation.script.insert_current_state') }}</el-button>
-            </el-form-item>
+            <el-button type="text">{{ $t('animation.script.export_template') }}</el-button>
+            <el-button type="text">{{ $t('animation.script.reload') }}</el-button>
+            <el-button type="text">{{ $t('animation.script.insert_current_state') }}</el-button>
         </el-form>
     </el-card>
 </template>
@@ -35,5 +31,8 @@ export default {
 </script>
 
 <style>
+.el-form-item__content {
+    flex-wrap: nowrap !important;
+}
 
 </style>
