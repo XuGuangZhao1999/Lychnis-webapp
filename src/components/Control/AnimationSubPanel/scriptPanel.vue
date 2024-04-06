@@ -1,7 +1,9 @@
 <template>
     <el-card>
         <template #header>
-            <span>{{ $t('animation.script.title') }}</span>
+            <div class="cardHeader">
+                <span>{{ $t('animation.script.title') }}</span>
+            </div>
         </template>
         <el-form label-position="left">
             <el-form-item>

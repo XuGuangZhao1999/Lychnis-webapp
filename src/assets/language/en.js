@@ -114,4 +114,8 @@ export default {
             insert_current_state: 'Insert current state',
         },
     },
+    placeholder: {
+        searchNodeId: 'Search node ID',
+        pressEnter: "Press Enter when done",
+    },
 }

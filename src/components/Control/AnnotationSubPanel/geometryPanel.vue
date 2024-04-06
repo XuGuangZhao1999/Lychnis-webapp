@@ -1,14 +1,14 @@
 <template>
     <el-card>
         <template #header>
-            <div class="container">
+            <div class="cardHeader">
                 <span>{{ $t('annotation.geometry.title') }}</span>
                 <el-button id="seniorBtn" type="text">{{ $t('annotation.geometry.advanced') }}</el-button>
             </div>
         </template>
         <el-form label-position="left" label-width="auto" size="small" style="min-width: 300px;">
             <el-form-item :label="$t('annotation.geometry.block_size')">
-                <div style="display: flex; flex-direction: row;">
+                <div style="display: flex;">
                     <el-select>
                     <el-option label="256x256x256"></el-option>
                     </el-select>
@@ -17,7 +17,7 @@
                 </div>
             </el-form-item>
             <el-form-item :label="$t('annotation.geometry.center')">
-                <div style="display: flex; flex-direction: row;">
+                <div style="display: flex;">
                     <el-input type="number"></el-input>
                     <el-input type="number"></el-input>
                     <el-input type="number"></el-input>

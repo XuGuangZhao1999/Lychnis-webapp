@@ -1,13 +1,15 @@
 <template>
     <el-card>
         <template #header>
-            <span>{{ $t('annotation.selected_node.title') }}</span>
+            <div class="cardHeader">
+                <span>{{ $t('annotation.selected_node.title') }}</span>
+            </div>
         </template>
         <el-form label-position="left" label-width="auto" size="small" style="min-width: 300px;">
             <el-form-item :label="$t('annotation.selected_node.node_id')">
-                <div style="display: flex; flex-direction: row;">
+                <div style="display: flex;">
                     <el-input></el-input>
-                    <el-input placeholder="搜索的节点编号"></el-input>
+                    <el-input :placeholder="$t('placeholder.searchNodeId')"></el-input>
                 </div>
             </el-form-item>
             <el-form-item :label="$t('annotation.selected_node.node_type')">
@@ -16,8 +18,8 @@
                 </el-select>
             </el-form-item>
             <el-form-item :label="$t('annotation.selected_node.message')">
-                <div style="display: flex; flex-direction: row;">
-                    <el-input placeholder="输入完成后按回车键"></el-input>
+                <div style="display: flex;">
+                    <el-input :placeholder="$t('placeholder.pressEnter')"></el-input>
                     <el-select>
                         <el-option label="Sure" value="1"/>
                     </el-select>
@@ -56,6 +58,6 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 
 </style>

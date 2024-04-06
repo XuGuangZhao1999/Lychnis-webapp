@@ -1,12 +1,12 @@
 <!-- Viewer panel -->
 <template>
     <div class="flexLayout">
-        <div v-if="store.state.core.bLoaded" style="display: flex; justify-content: space-around; height: 40px; background-color: #313131;">
-            <el-slider v-model="lower" style="height: 40px; width: 47%;" show-input size="small" @wheel="lHandlerWheel" @input="updateConstrast" :max="upper"/>
-            <el-slider v-model="upper" style="height: 40px; width: 47%;" show-input size="small" @wheel="uHandlerWheel" @input="updateConstrast" :max="65535"/>
+        <div v-if="store.state.core.bLoaded" class="constrast">
+            <el-slider v-model="lower" show-input size="small" @wheel="lHandlerWheel" @input="updateConstrast" :max="upper"/>
+            <el-slider v-model="upper" show-input size="small" @wheel="uHandlerWheel" @input="updateConstrast" :max="65535"/>
         </div>
         <div class="wrapper">
-            <canvas id="imageContainer" ref="canvas" v-if='bShow' width="1600" height="1200"></canvas>
+            <canvas class="imageContainer" ref="canvas" v-if='bShow' width="1600" height="1200"></canvas>
         </div>
         <div style="display: flex; justify-content: center; background-color: #313131;">
             <el-slider v-if="store.state.core.bLoaded" v-model="currentLevel" show-input="true" :debounce="100" :max="store.state.core.levels" size="small"/>
@@ -114,19 +114,14 @@ export default {
 
 <style scoped>
 div {
-    margin: 0px;
-    border: 0px;
-    padding: 0px;
     width: 100%;
 }
 
 .flexLayout {
-    margin: 0px;
     border-top: 1px solid #DCDFE6;
     border-left: 0px;
     border-right: 0px;
     border-bottom: 1px solid #DCDFE6;
-    padding: 0px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -138,21 +133,26 @@ div {
 }
 
 .wrapper {
-    margin: 0px;
-    border: 0px;
-    padding: 0px;
     width: 100%;
     height: calc(100% - 80px);
 }
 
-#imageContainer {
-    margin: 0px;
-    border: 0px;
-    padding: 0px;
+.imageContainer {
     width: auto;
     height: 100%;
     max-width: 100%;
     max-height: 100%;
+}
+
+.constrast {
+    display: flex;
+    justify-content: space-around;
+    height: 40px;
+    background-color: #313131;
+}
+
+.constrast > .el-slider {
+    width: 47%;
 }
 
 .el-slider {

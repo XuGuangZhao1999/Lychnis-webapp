@@ -1,7 +1,7 @@
 <template>
     <el-card>
         <template #header>
-            <div style="display: flex; justify-content: space-between;">
+            <div class="cardHeader">
                 <span>{{ $t('animation.keyframe.title') }}</span>
                 <div>
                     <el-button id="seniorBtn" type="text">{{ $t('animation.keyframe.new') }}</el-button>

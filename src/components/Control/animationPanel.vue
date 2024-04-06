@@ -1,6 +1,6 @@
 <template>
     <el-tab-pane :label="$t('animation.title')">
-        <div style="display: flex; flex-direction: column; height: 100%;">
+        <div class="panelContainer">
             <keyframeSettingsPanel :name="5"></keyframeSettingsPanel>
             <allKeyfamesPanel :name="6"></allKeyfamesPanel>
             <allFramesPanel :name="7"></allFramesPanel>

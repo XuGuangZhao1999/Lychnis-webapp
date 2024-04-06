@@ -1,7 +1,9 @@
 <template>
     <el-card shadow="never">
         <template #header>
-            <span>{{ $t('annotation.settings.title') }}</span>
+            <div class="cardHeader">
+                <span>{{ $t('annotation.settings.title') }}</span>
+            </div>
         </template>
         <el-form label-position="left" label-width="auto" size="small" style="min-width: 300px;">
             <el-form-item :label="$t('annotation.settings.annotation_channel')">

@@ -114,4 +114,8 @@ export default {
             insert_current_state: '添加当前状态',
         },
     },
+    placeholder: {
+        searchNodeId: '搜索的节点编号',
+        pressEnter: "输入完成后按回车键",
+    },
 }

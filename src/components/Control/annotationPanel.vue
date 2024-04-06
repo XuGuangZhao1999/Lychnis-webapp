@@ -1,7 +1,7 @@
 <!-- Annotation panel -->
 <template>
     <el-tab-pane :label="$t('annotation.title')">
-        <div style="display: flex; flex-direction: column; height: 100%;">
+        <div class="panelContainer">
             <settingsPanel></settingsPanel>
             <geometryPanel></geometryPanel>
             <currentNodeInfoPanel></currentNodeInfoPanel>
@@ -29,6 +29,6 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 
 </style>

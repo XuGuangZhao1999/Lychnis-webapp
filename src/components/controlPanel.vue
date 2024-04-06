@@ -1,6 +1,6 @@
 <!-- Control panel -->
 <template>
-    <el-tabs id="tabs" type="border-card" stretch="true">
+    <el-tabs class="tabs" type="border-card" stretch="true">
         <annotationPanel></annotationPanel>
         <animationPanel></animationPanel>
     </el-tabs>
@@ -23,18 +23,21 @@ export default {
 </script>
 
 <style>
-#tabs {
-    margin: 0px;
-    border: 0px;
-    padding: 0px;
+.tabs {
     height: 100%;
     margin: 0px;
     border: 0px;
     padding: 0px;
 }
 
-.container {
+.panelContainer {
+    display: flex;
+    flex-direction: column;
     height: 100%;
+}
+
+.cardHeader {
+    height: 30px;
     display: flex;
     justify-content: space-between;
 }
@@ -42,10 +45,15 @@ export default {
 span {
     display: flex;
     align-items: center;
+    font-size: 14px;
+}
+
+span.el-table__empty-text {
+    justify-content: center;
 }
 
 .el-table {
-    background-color: #3c3c3c !important;
+    --el-table-bg-color: #3c3c3c !important;
 }
 
 .el-table th.el-table__cell {
@@ -81,8 +89,8 @@ span {
     background-color: #313131 !important;
     color: white !important;
     --el-card-padding: 0px !important;
-    /* border-top: 2px solid #FFFFFF !important;
-    border-bottom: 1px solid #FFFFFF !important; */
+    border-bottom: 1px solid !important;
+    --el-card-border-radius: 0px !important;
 }
 
 .el-form {
@@ -107,14 +115,6 @@ span {
 
 .el-input__inner {
     color: white !important;
-}
-
-.el-table {
-    background-color: #3c3c3c;
-}
-
-span.el-table__empty-text {
-    justify-content: center;
 }
 
 </style>

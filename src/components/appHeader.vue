@@ -1,6 +1,6 @@
 <!-- App header -->
 <template>
-    <el-header id="header" direction="horizontal">
+    <el-header class="header" direction="horizontal">
         <menuBar></menuBar>
     </el-header>
 </template>
@@ -17,7 +17,7 @@ export default{
 </script>
 
 <style scoped>
-#header {
+.header {
     margin: 0px;
     border: 0px;
     padding: 0px;

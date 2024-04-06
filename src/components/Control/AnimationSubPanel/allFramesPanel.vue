@@ -1,7 +1,9 @@
 <template>
     <el-card>
         <template #header>
-            <span>{{ $t('animation.all_frames.title') }}</span>
+            <div class="cardHeader">
+                <span>{{ $t('animation.all_frames.title') }}</span>
+            </div>
         </template>
         <el-slider v-model="frameIndex" show-input size="small"/>
         <el-button type="text">{{ $t('animation.all_frames.previous_keyframe') }}</el-button>

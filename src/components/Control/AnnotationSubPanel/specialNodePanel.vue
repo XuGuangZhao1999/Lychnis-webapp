@@ -1,7 +1,7 @@
 <template>
     <el-card>
         <template #header>
-            <div style="display: flex; justify-content: space-between;">
+            <div class="cardHeader">
                 <span>{{ $t('annotation.special_nodes.title') }}</span>
                 <div>
                     <el-button id="seniorBtn" type="text">{{ $t('annotation.special_nodes.filter') }}</el-button>
