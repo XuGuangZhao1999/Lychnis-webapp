@@ -1,4 +1,3 @@
-// import './assets/css/global.css'
 import { createApp } from 'vue'
 import App from './App.vue'
 import ElementPlus from 'element-plus'
@@ -27,11 +26,6 @@ window.paint = function(imageBinary) {
 window.showMessage = function(message) {
     store.commit("status/showMessage", message)
 }
-
-window.showConstrast = function() {
-    console.log(store.state.core.constrastRange)
-}
-
 
 // Vuex store
 const coreModel = {

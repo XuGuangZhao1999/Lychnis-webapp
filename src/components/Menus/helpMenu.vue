@@ -23,6 +23,7 @@ export default {
   setup() {
     const store = useStore()
 
+    // About the App
     function about() {
       let info = "Lychnis is a fiber-tracing tool for volumetric data.<br/>" + 
                  "Developed and maintained by SMART/VISoR team (at SIAT and USTC).<br/>" +
@@ -38,6 +39,7 @@ export default {
       })
     }
 
+    // I18n
     function changeLanguage(lang) {
       store.commit('core/setLanguage', lang);
       store.commit('core/setI18N', lang);

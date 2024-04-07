@@ -27,6 +27,7 @@ export default {
         const upper = ref(store.state.core.constrastRange.upper)
         const channel = ref(0)
 
+        // Update the constrast range
         function updateConstrast() {
             store.commit('core/setConstrastRange', {
                 "index": channel.value,
@@ -35,6 +36,7 @@ export default {
             })
         }
 
+        // Handle the lower slider wheel event
         function lHandlerWheel(e) {
             if(e.deltaY > 0) {
                 lower.value -= 1
@@ -45,6 +47,7 @@ export default {
             updateConstrast()
         }
 
+        // Handle the upper slider wheel event
         function uHandlerWheel(e) {
             if(e.deltaY > 0) {
                 upper.value -= 1
@@ -55,6 +58,7 @@ export default {
             updateConstrast()
         }
 
+        // Change the image resolution
         function resolutionNumberChanged(){
             let req = {
                 "functionName": "resolutionChange",
@@ -96,6 +100,8 @@ export default {
         let isMouseDown = false;
         let scaleX = canvas.width / canvas.offsetWidth
         let scaleY = canvas.height / canvas.offsetHeight
+        
+        // Resize observer
         let resizeObserver = new ResizeObserver(() => {
             scaleX = canvas.width / canvas.offsetWidth;
             scaleY = canvas.height / canvas.offsetHeight;
@@ -118,6 +124,7 @@ export default {
             return modifier
         }
 
+        // Mouse events
         canvas.addEventListener("mousedown", function(e) {
             isMouseDown = true;
             if(e.button === 0) {

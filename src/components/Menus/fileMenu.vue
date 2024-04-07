@@ -96,11 +96,33 @@ export default {
       })
     }
 
+    function exportNodes(format) {
+      let req = {
+        "functionName": "exportNodes",
+        "args": {
+          "format": format
+        }
+      }
+
+      window.cefQuery({
+        request: JSON.stringify(req),
+        onSuccess: function(response) {
+          // Export nodes success.
+          window.showMessage("exportNodes: " + response);
+        },
+        onFailure: function(error_code, error_message) {
+          // Export nodes failed, output error message to statusBar.
+          window.showMessage(error_code + ": " + error_message)
+        }
+      })
+    }
+
     return { 
       store,
       loadProject,
       saveProject,
       importNodes,
+      exportNodes,
     }
   },
 }
