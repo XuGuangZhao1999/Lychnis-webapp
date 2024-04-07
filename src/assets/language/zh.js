@@ -82,6 +82,12 @@ export default {
             id: '编号',
             message: '信息',
         },
+        type: {
+            title: '类型',
+            line: '线段',
+            point: '点',
+            moveSelectedNode: '移动选中的节点',
+        },
     },
     animation: {
         title: '动画',

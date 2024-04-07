@@ -16,8 +16,9 @@
             </el-form-item>
             <el-form-item :label="$t('annotation.settings.annotation_type')">
                 <el-select>
-                    <el-option label="线段" value="line"/>
-                    <el-option label="点" value="point"/>
+                    <el-option :label="$t('annotation.type.line')" value="line"/>
+                    <el-option :label="$t('annotation.type.point')" value="point"/>
+                    <el-option :label="$t('annotation.type.moveSelectedNode')" value="moveSelectedNode"/>
                 </el-select>
             </el-form-item>
             <el-form-item :label="$t('annotation.settings.slice_thickness')">

@@ -8,6 +8,31 @@ import en from 'element-plus/dist/locale/en.mjs'
 import { createStore } from 'vuex'
 import i18n from './assets/language/index.js'
 
+// Global function
+// Paint image on canvas
+window.paint = function(imageBinary) {
+    let blob = new Blob([imageBinary], {type: "image/jpeg"})
+    let img = new Image();
+
+    img.src = URL.createObjectURL(blob);
+    img.onload = function() {
+        let canvas = document.getElementById("imageContainer")
+        let ctx = canvas.getContext("2d")
+
+        ctx.drawImage(img, 0, 0)
+    }
+}
+
+// Show message
+window.showMessage = function(message) {
+    store.commit("status/showMessage", message)
+}
+
+window.showConstrast = function() {
+    console.log(store.state.core.constrastRange)
+}
+
+
 // Vuex store
 const coreModel = {
     namespaced: true,
@@ -15,11 +40,11 @@ const coreModel = {
         return {
             language: "en",
             I18N: i18n,
-            bLoaded: true,
+            bLoaded: false,
             levels: 1,
             constrastRange: {
-                lower: 100,
-                upper: 1000,
+                "lower": 100,
+                "upper": 1000,
             },
         }
     },
@@ -44,6 +69,25 @@ const coreModel = {
         setConstrastRange(state, range) {
             state.constrastRange.lower = range.lower
             state.constrastRange.upper = range.upper
+
+            let req = {
+                "functionName": "constrastChanged",
+                "args": {
+                    "index": range.index,
+                    "v1": state.constrastRange.lower,
+                    "v2": state.constrastRange.upper
+                }
+            }
+
+            window.cefQuery({
+                request: JSON.stringify(req),
+                onSuccess: function(response){
+                    window.showMessage("constrast change: " + response)
+                },
+                onFailure: function(error_code, error_message){
+                    window.showMessage(error_code + ": " + error_message)
+                }
+            })
         }
     },
     getters: {
@@ -83,30 +127,6 @@ const store = createStore({
         core: coreModel
     }
 })
-
-// Global function
-// Paint image on canvas
-window.paint = function(imageBinary) {
-    let blob = new Blob([imageBinary], {type: "image/jpeg"})
-    let img = new Image();
-
-    img.src = URL.createObjectURL(blob);
-    img.onload = function() {
-        let canvas = document.getElementById("imageContainer")
-        let ctx = canvas.getContext("2d")
-
-        ctx.drawImage(img, 0, 0)
-    }
-}
-
-// Show message
-window.showMessage = function(message) {
-    store.commit("status/showMessage", message)
-}
-
-window.showConstrast = function() {
-    console.log(store.state.core.constrastRange)
-}
 
 // Create app instance
 const app = createApp(App)

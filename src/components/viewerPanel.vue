@@ -5,11 +5,11 @@
             <el-slider v-model="lower" show-input size="small" @wheel="lHandlerWheel" @input="updateConstrast" :max="upper"/>
             <el-slider v-model="upper" show-input size="small" @wheel="uHandlerWheel" @input="updateConstrast" :max="65535"/>
         </div>
-        <div class="wrapper">
-            <canvas class="imageContainer" ref="canvas" v-if='bShow' width="1600" height="1200"></canvas>
+        <div v-show="store.state.core.bLoaded" class="wrapper">
+            <canvas class="imageContainer" ref="canvas" width="1600" height="1200"></canvas>
         </div>
-        <div style="display: flex; justify-content: center; background-color: #313131;">
-            <el-slider v-if="store.state.core.bLoaded" v-model="currentLevel" show-input="true" :debounce="100" :max="store.state.core.levels" size="small"/>
+        <div v-if="store.state.core.bLoaded" style="display: flex; justify-content: center; background-color: #313131;">
+            <el-slider v-model="currentLevel" @input="resolutionNumberChanged" show-input="true" :debounce="100" :max="store.state.core.levels" size="small"/>
         </div>
     </div>
 </template>
@@ -22,15 +22,16 @@ export default {
     name: 'viewerPanel',
     setup() {
         const store = useStore()
-        const bShow = ref(true)
         const currentLevel = ref(store.state.core.levels - 1)
         const lower = ref(store.state.core.constrastRange.lower)
         const upper = ref(store.state.core.constrastRange.upper)
+        const channel = ref(0)
 
         function updateConstrast() {
             store.commit('core/setConstrastRange', {
-                lower: lower.value,
-                upper: upper.value
+                "index": channel.value,
+                "lower": lower.value,
+                "upper": upper.value
             })
         }
 
@@ -54,15 +55,36 @@ export default {
             updateConstrast()
         }
 
+        function resolutionNumberChanged(){
+            let req = {
+                "functionName": "resolutionChange",
+                "args": {
+                    "currentLevel": currentLevel
+                }
+            }
+
+            window.cefQuery({
+                request: JSON.stringify(req),
+                onSuccess: function(response){
+                    window.showMessage("Resolution change: " + response)
+                },
+                onFailure: function(error_code, error_message){
+                    window.showMessage(error_code + ": " + error_message)
+                }
+            }
+            )
+        }
+
         return {
             store,
-            bShow,
             currentLevel,
             lower,
             upper,
+            channel,
             lHandlerWheel,
             uHandlerWheel,
-            updateConstrast
+            updateConstrast,
+            resolutionNumberChanged,
         }
     },
     mounted() {
@@ -72,8 +94,6 @@ export default {
         ctx.fillRect(0, 0, canvas.width, canvas.height)
 
         let isMouseDown = false;
-        let initX;
-        let initY;
         let scaleX = canvas.width / canvas.offsetWidth
         let scaleY = canvas.height / canvas.offsetHeight
         let resizeObserver = new ResizeObserver(() => {
@@ -81,32 +101,118 @@ export default {
             scaleY = canvas.height / canvas.offsetHeight;
         });
         resizeObserver.observe(canvas);
+
+        // Get the modifier key
+        const getModifier = function(e){
+            let modifier = {}
+            if(e.getModifierState('Shift')) {
+                modifier["Shift"] = true
+            }
+            if(e.getModifierState('Control')) {
+                modifier["Control"] = true
+            }
+            if(e.getModifierState('KeyZ')) {
+                modifier["KeyZ"] = true
+            }
+
+            return modifier
+        }
+
         canvas.addEventListener("mousedown", function(e) {
+            isMouseDown = true;
             if(e.button === 0) {
-                isMouseDown = true;
-                ctx.strokeStyle = "red";
-                initX = e.offsetX * scaleX;
-                initY = e.offsetY * scaleY;
-                ctx.beginPath();
-                ctx.moveTo(initX, initY);
+                let req = {
+                    "functionName": "mousePressEvent",
+                    "args": {
+                        "button": "left",
+                        "posX": e.offsetX * scaleX, 
+                        "posY": e.offsetY * scaleY,
+                        "modifier": getModifier(e),
+                    }
+                }
+
+                window.cefQuery({
+                    request: JSON.stringify(req),
+                    onSuccess: function(response){
+                        window.showMessage(response)
+                    },
+                    onFailure: function(error_code, error_message){
+                        window.showMessage(error_code + ": " + error_message)
+                    }
+                })
             }
-        }, false);
+        }, false)
+
         canvas.addEventListener("mouseup", function(e) {
+            isMouseDown = false;
             if(e.button === 0) {
-                isMouseDown = false;
+                let req = {
+                    "functionName": "mouseReleaseEvent",
+                    "args": {
+                        "button": "left",
+                        "posX": e.offsetX * scaleX, 
+                        "posY": e.offsetY * scaleY,
+                        "modifier": getModifier(e),
+                    }
+                }
+
+                window.cefQuery({
+                    request: JSON.stringify(req),
+                    onSuccess: function(response){
+                        window.showMessage(response)
+                    },
+                    onFailure: function(error_code, error_message){
+                        window.showMessage(error_code + ": " + error_message)
+                    }
+                })
             }
-        }, false);
+        }, false)
+
         canvas.addEventListener("mousemove", function(e) {
             if(isMouseDown) {
-                ctx.lineTo(e.offsetX * scaleX, e.offsetY * scaleY);
-                ctx.stroke();
-                console.log(e.offsetX * scaleX, e.offsetY * scaleY);
-                console.log("偏移方向offset："+(e.offsetX * scaleX - initX)+","+(e.offsetY * scaleY - initY));
+                let req = {
+                    "functionName": "mouseMoveEvent",
+                    "args": {
+                        "button": "left",
+                        "posX": e.offsetX * scaleX, 
+                        "posY": e.offsetY * scaleY,
+                        "modifier": getModifier(e),
+                    }
+                }
+
+                window.cefQuery({
+                    request: JSON.stringify(req),
+                    onSuccess: function(response){
+                        window.showMessage(response)
+                    },
+                    onFailure: function(error_code, error_message){
+                        window.showMessage(error_code + ": " + error_message)
+                    }
+                })
             }
-        }, false);
+        }, false)
+
         canvas.addEventListener("wheel", function(e) {
             console.log(e.deltaX, e.deltaY, e.deltaZ);
-        }, false);
+            let req = {
+                "functionName": "wheelEvent",
+                "args": {
+                    "deltaY": e.deltaY,
+                    "posX": e.offsetX * scaleX,
+                    "posY": e.offsetY * scaleY
+                }
+            }
+
+            window.cefQuery({
+                request: JSON.stringify(req),
+                onSuccess: function(response){
+                    window.showMessage("Wheel event: " + response)
+                },
+                onFailure: function(error_code, error_message){
+                    window.showMessage(error_code + ": " + error_message)
+                }
+            })
+        }, false)
     }
 }
 

@@ -82,6 +82,12 @@ export default {
             id: 'ID',
             message: 'Message',
         },
+        type: {
+            title: 'Type',
+            line: 'Line',
+            point: 'Point',
+            moveSelectedNode: 'Move selected node',
+        }
     },
     animation: {
         title: 'Animation',
