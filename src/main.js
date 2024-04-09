@@ -15,7 +15,7 @@ window.paint = function(imageBinary) {
 
     img.src = URL.createObjectURL(blob);
     img.onload = function() {
-        let canvas = document.getElementById("imageContainer")
+        let canvas = document.getElementById("viewer")
         let ctx = canvas.getContext("2d")
 
         ctx.drawImage(img, 0, 0)

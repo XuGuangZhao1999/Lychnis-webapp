@@ -45,6 +45,7 @@ export default {
       window.cefQuery({
         request: JSON.stringify(req),
         onSuccess: function(response) {
+          // Set the flag to indicate that the project has been loaded.
           store.commit('core/setBLoaded', true)
           // Load project success, paint response data to canvas.
           window.showMessage("loadProject: " + response);

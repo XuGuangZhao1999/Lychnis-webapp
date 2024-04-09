@@ -6,7 +6,7 @@
             <el-slider v-model="upper" show-input size="small" @wheel="uHandlerWheel" @input="updateConstrast" :max="65535"/>
         </div>
         <div v-show="store.state.core.bLoaded" class="wrapper">
-            <canvas class="imageContainer" ref="canvas" width="1600" height="1200"></canvas>
+            <canvas id="viewer" class="imageContainer" ref="canvas" width="1600" height="1200"></canvas>
         </div>
         <div v-if="store.state.core.bLoaded" style="display: flex; justify-content: center; background-color: #313131;">
             <el-slider v-model="currentLevel" @input="resolutionNumberChanged" show-input="true" :debounce="100" :max="store.state.core.levels" size="small"/>
