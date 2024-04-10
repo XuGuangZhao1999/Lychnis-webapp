@@ -2,8 +2,8 @@
 <template>
     <div class="flexLayout">
         <div v-if="store.state.core.bLoaded" class="constrast">
-            <el-slider v-model="lower" show-input size="small" @wheel="lHandlerWheel" @input="updateConstrast" :max="upper"/>
-            <el-slider v-model="upper" show-input size="small" @wheel="uHandlerWheel" @input="updateConstrast" :max="65535"/>
+            <el-slider v-model="lower" show-input size="small" @wheel="lHandlerWheel" @input="updateConstrast" :debounce="100" :max="upper"/>
+            <el-slider v-model="upper" show-input size="small" @wheel="uHandlerWheel" @input="updateConstrast" :debounce="100" :max="65535"/>
         </div>
         <div v-show="store.state.core.bLoaded" class="wrapper">
             <canvas id="viewer" class="imageContainer" ref="canvas" width="1600" height="1200"></canvas>
