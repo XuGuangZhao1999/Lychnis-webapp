@@ -34,7 +34,7 @@ const coreModel = {
         return {
             language: "en",
             I18N: i18n,
-            bLoaded: false,
+            bLoaded: true,
             levels: 1,
             constrastRange: {
                 "lower": 100,

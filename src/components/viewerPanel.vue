@@ -97,7 +97,6 @@ export default {
         ctx.fillStyle = '#000000'
         ctx.fillRect(0, 0, canvas.width, canvas.height)
 
-        let isMouseDown = false;
         let scaleX = canvas.width / canvas.offsetWidth
         let scaleY = canvas.height / canvas.offsetHeight
         
@@ -126,7 +125,6 @@ export default {
 
         // Mouse events
         canvas.addEventListener("mousedown", function(e) {
-            isMouseDown = true;
             if(e.button === 0) {
                 let req = {
                     "functionName": "mousePressEvent",
@@ -151,7 +149,6 @@ export default {
         }, false)
 
         canvas.addEventListener("mouseup", function(e) {
-            isMouseDown = false;
             if(e.button === 0) {
                 let req = {
                     "functionName": "mouseReleaseEvent",
@@ -176,7 +173,7 @@ export default {
         }, false)
 
         canvas.addEventListener("mousemove", function(e) {
-            if(isMouseDown) {
+            if(e.buttons === 1) {
                 let req = {
                     "functionName": "mouseMoveEvent",
                     "args": {
