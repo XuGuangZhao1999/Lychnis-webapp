@@ -2,6 +2,7 @@
 <template>
     <div class="flexLayout">
         <div v-if="store.state.core.bLoaded" class="constrast">
+            <el-color-picker v-model="color" show-alpha/>
             <el-slider v-model="lower" show-input size="small" @wheel="lHandlerWheel" @input="updateConstrast" :debounce="100" :max="upper"/>
             <el-slider v-model="upper" show-input size="small" @wheel="uHandlerWheel" @input="updateConstrast" :debounce="100" :max="65535"/>
         </div>
@@ -21,6 +22,7 @@ import { useStore } from 'vuex'
 export default {
     name: 'viewerPanel',
     setup() {
+        const color = ref('rgva(19, 206, 102, 0.8)')
         const store = useStore()
         const currentLevel = ref(store.state.core.levels - 1)
         const lower = ref(store.state.core.constrastRange.lower)
@@ -80,6 +82,7 @@ export default {
         }
 
         return {
+            color,
             store,
             currentLevel,
             lower,
@@ -257,6 +260,7 @@ div {
 .constrast {
     display: flex;
     justify-content: space-around;
+    align-items: center;
     height: 40px;
     background-color: #313131;
 }
