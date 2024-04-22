@@ -6,7 +6,7 @@
     <el-menu-item index="1-2" @click="saveProject()">{{ $t('file.save') }}</el-menu-item>
     <el-menu-item index="1-3">{{ $t('file.save_as') }}</el-menu-item>
     <el-divider class="hLine"/>
-    <el-menu-item index="1-4">{{ $t('file.open_image_file') }}</el-menu-item>
+    <el-menu-item index="1-4" @click="openImage()">{{ $t('file.open_image_file') }}</el-menu-item>
     <el-menu-item index="1-5">{{ $t('file.open_image_as_sps') }}</el-menu-item>
     <el-menu-item index="1-6" @click="importNodes()">{{ $t('file.import_nodes') }}</el-menu-item>
     <el-menu-item index="1-7">{{ $t('file.import_parameters') }}</el-menu-item>
@@ -76,6 +76,25 @@ export default {
       })
     }
 
+    function openImage() {
+      let req = {
+        "functionName": "openImage",
+        "args": {}
+      }
+
+      window.cefQuery({
+        request: JSON.stringify(req),
+        onSuccess: function(response) {
+          // Open image success.
+          window.showMessage("openImage: " + response);
+        },
+        onFailure: function(error_code, error_message) {
+          // Open image failed, output error message to statusBar.
+          window.showMessage(error_code + ": " + error_message)
+        }
+      })
+    }
+
     function importNodes(format) {
       let req = {
         "functionName": "importNodes",
@@ -122,6 +141,7 @@ export default {
       store,
       loadProject,
       saveProject,
+      openImage,
       importNodes,
       exportNodes,
     }

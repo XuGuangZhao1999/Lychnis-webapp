@@ -105,82 +105,73 @@ export default {
         
         // Resize observer
         let resizeObserver = new ResizeObserver(() => {
-            scaleX = canvas.width / canvas.offsetWidth;
-            scaleY = canvas.height / canvas.offsetHeight;
+            scaleX = canvas.width / canvas.offsetWidth
+            scaleY = canvas.height / canvas.offsetHeight
         });
-        resizeObserver.observe(canvas);
+        resizeObserver.observe(canvas)
+
+        const mapMouseKey = ["left", "middle", "right"]
 
         // Get the modifier key
-        const getModifier = function(e){
+        const getModifier = function(e) {
             let modifier = {}
-            if(e.getModifierState('Shift')) {
-                modifier["Shift"] = true
-            }
-            if(e.getModifierState('Control')) {
-                modifier["Control"] = true
-            }
-            if(e.getModifierState('KeyZ')) {
-                modifier["KeyZ"] = true
-            }
+            modifier["Shift"] = e.shiftKey
+            modifier["Control"] = e.ctrlKey
 
             return modifier
         }
 
         // Mouse events
         canvas.addEventListener("mousedown", function(e) {
-            if(e.button === 0) {
-                let req = {
-                    "functionName": "mousePressEvent",
-                    "args": {
-                        "button": "left",
-                        "posX": e.offsetX * scaleX, 
-                        "posY": e.offsetY * scaleY,
-                        "modifier": getModifier(e),
-                    }
+            let req = {
+                "functionName": "mousePressEvent",
+                "args": {
+                    "button": mapMouseKey[e.button],
+                    "posX": e.offsetX * scaleX, 
+                    "posY": e.offsetY * scaleY,
+                    "modifier": getModifier(e),
                 }
-
-                window.cefQuery({
-                    request: JSON.stringify(req),
-                    onSuccess: function(response){
-                        window.showMessage(response)
-                    },
-                    onFailure: function(error_code, error_message){
-                        window.showMessage(error_code + ": " + error_message)
-                    }
-                })
             }
+
+            window.cefQuery({
+                request: JSON.stringify(req),
+                onSuccess: function(response){
+                    window.showMessage(response)
+                },
+                onFailure: function(error_code, error_message){
+                    window.showMessage(error_code + ": " + error_message)
+                }
+            })
         }, false)
 
         canvas.addEventListener("mouseup", function(e) {
-            if(e.button === 0) {
-                let req = {
-                    "functionName": "mouseReleaseEvent",
-                    "args": {
-                        "button": "left",
-                        "posX": e.offsetX * scaleX, 
-                        "posY": e.offsetY * scaleY,
-                        "modifier": getModifier(e),
-                    }
+            let req = {
+                "functionName": "mouseReleaseEvent",
+                "args": {
+                    "button": mapMouseKey[e.button],
+                    "posX": e.offsetX * scaleX, 
+                    "posY": e.offsetY * scaleY,
+                    "modifier": getModifier(e),
                 }
-
-                window.cefQuery({
-                    request: JSON.stringify(req),
-                    onSuccess: function(response){
-                        window.showMessage(response)
-                    },
-                    onFailure: function(error_code, error_message){
-                        window.showMessage(error_code + ": " + error_message)
-                    }
-                })
             }
+
+            window.cefQuery({
+                request: JSON.stringify(req),
+                onSuccess: function(response){
+                    window.showMessage(response)
+                },
+                onFailure: function(error_code, error_message){
+                    window.showMessage(error_code + ": " + error_message)
+                }
+            })
         }, false)
 
         canvas.addEventListener("mousemove", function(e) {
-            if(e.buttons === 1) {
+            if (e.buttons !== 0) {
                 let req = {
                     "functionName": "mouseMoveEvent",
                     "args": {
-                        "button": "left",
+                        "button": mapMouseKey[e.button],
                         "posX": e.offsetX * scaleX, 
                         "posY": e.offsetY * scaleY,
                         "modifier": getModifier(e),
@@ -200,11 +191,10 @@ export default {
         }, false)
 
         canvas.addEventListener("wheel", function(e) {
-            console.log(e.deltaX, e.deltaY, e.deltaZ);
             let req = {
                 "functionName": "wheelEvent",
                 "args": {
-                    "deltaY": e.deltaY,
+                    "deltaY": -e.deltaY,
                     "posX": e.offsetX * scaleX,
                     "posY": e.offsetY * scaleY
                 }
