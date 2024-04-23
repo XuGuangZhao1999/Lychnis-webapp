@@ -105,12 +105,12 @@ export default {
         
         // Resize observer
         let resizeObserver = new ResizeObserver(() => {
-            scaleX = canvas.width / canvas.offsetWidth
-            scaleY = canvas.height / canvas.offsetHeight
+            window.requestAnimationFrame(() => {
+                scaleX = canvas.width / canvas.offsetWidth
+                scaleY = canvas.height / canvas.offsetHeight
+            })
         });
         resizeObserver.observe(canvas)
-
-        const mapMouseKey = ["left", "middle", "right"]
 
         // Get the modifier key
         const getModifier = function(e) {
@@ -126,7 +126,7 @@ export default {
             let req = {
                 "functionName": "mousePressEvent",
                 "args": {
-                    "button": mapMouseKey[e.button],
+                    "button": e.button,
                     "posX": e.offsetX * scaleX, 
                     "posY": e.offsetY * scaleY,
                     "modifier": getModifier(e),
@@ -148,7 +148,7 @@ export default {
             let req = {
                 "functionName": "mouseReleaseEvent",
                 "args": {
-                    "button": mapMouseKey[e.button],
+                    "button": e.button,
                     "posX": e.offsetX * scaleX, 
                     "posY": e.offsetY * scaleY,
                     "modifier": getModifier(e),
@@ -168,10 +168,25 @@ export default {
 
         canvas.addEventListener("mousemove", function(e) {
             if (e.buttons !== 0) {
+                let btn = 0
+                switch (e.buttons) {
+                    case 1:
+                        btn = 0
+                        break
+                    case 2:
+                        btn= 2
+                        break
+                    case 4:
+                        btn = 1
+                        break
+                    default:
+                        btn = 0
+                        break
+                }
                 let req = {
                     "functionName": "mouseMoveEvent",
                     "args": {
-                        "button": mapMouseKey[e.button],
+                        "button": btn,
                         "posX": e.offsetX * scaleX, 
                         "posY": e.offsetY * scaleY,
                         "modifier": getModifier(e),

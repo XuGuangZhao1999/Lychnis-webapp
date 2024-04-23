@@ -17,6 +17,10 @@ export default {
   setup() {
     const store = useStore();
 
+    document.addEventListener("contextmenu", function(e) {
+      e.preventDefault();
+    })
+
     return {
       store
     }
