@@ -112,6 +112,12 @@ export default {
         });
         resizeObserver.observe(canvas)
 
+        let interactQueue = Promise.resolve()
+        
+        function interact(eventHandler) {
+            interactQueue = interactQueue.then(eventHandler)
+        }
+
         // Get the modifier key
         const getModifier = function(e) {
             let modifier = {}
@@ -133,15 +139,43 @@ export default {
                 }
             }
 
-            window.cefQuery({
-                request: JSON.stringify(req),
-                onSuccess: function(response){
-                    window.showMessage(response)
-                },
-                onFailure: function(error_code, error_message){
-                    window.showMessage(error_code + ": " + error_message)
+            interact(
+                async () => {
+                    window.cefQuery({
+                        request: JSON.stringify(req),
+                        onSuccess: function(response){
+                            window.showMessage(response)
+                        },
+                        onFailure: function(error_code, error_message){
+                            window.showMessage(error_code + ": " + error_message)
+                        }
+                    })
                 }
-            })
+            )
+            // interactQueue = interactQueue.then(
+            //     () => new Promise((resolve, reject) => {
+            //         window.cefQuery({
+            //             request: JSON.stringify(req),
+            //             onSuccess: function(response){
+            //                 window.showMessage(response)
+            //                 resolve()
+            //             },
+            //             onFailure: function(error_code, error_message){
+            //                 window.showMessage(error_code + ": " + error_message)
+            //                 reject()
+            //             }
+            //         })
+            //     })
+            // )
+            // window.cefQuery({
+            //     request: JSON.stringify(req),
+            //     onSuccess: function(response){
+            //         window.showMessage(response)
+            //     },
+            //     onFailure: function(error_code, error_message){
+            //         window.showMessage(error_code + ": " + error_message)
+            //     }
+            // })
         }, false)
 
         canvas.addEventListener("mouseup", function(e) {
@@ -154,16 +188,29 @@ export default {
                     "modifier": getModifier(e),
                 }
             }
-
-            window.cefQuery({
-                request: JSON.stringify(req),
-                onSuccess: function(response){
-                    window.showMessage(response)
-                },
-                onFailure: function(error_code, error_message){
-                    window.showMessage(error_code + ": " + error_message)
+            
+            interact(
+                async () => {
+                    window.cefQuery({
+                        request: JSON.stringify(req),
+                        onSuccess: function(response){
+                            window.showMessage(response)
+                        },
+                        onFailure: function(error_code, error_message){
+                            window.showMessage(error_code + ": " + error_message)
+                        }
+                    })
                 }
-            })
+            )
+            // window.cefQuery({
+            //     request: JSON.stringify(req),
+            //     onSuccess: function(response){
+            //         window.showMessage(response)
+            //     },
+            //     onFailure: function(error_code, error_message){
+            //         window.showMessage(error_code + ": " + error_message)
+            //     }
+            // })
         }, false)
 
         canvas.addEventListener("mousemove", function(e) {
@@ -192,16 +239,29 @@ export default {
                         "modifier": getModifier(e),
                     }
                 }
-
-                window.cefQuery({
-                    request: JSON.stringify(req),
-                    onSuccess: function(response){
-                        window.showMessage(response)
-                    },
-                    onFailure: function(error_code, error_message){
-                        window.showMessage(error_code + ": " + error_message)
-                    }
-                })
+                
+                interact(
+                async () => {
+                    window.cefQuery({
+                        request: JSON.stringify(req),
+                        onSuccess: function(response){
+                            window.showMessage(response)
+                        },
+                        onFailure: function(error_code, error_message){
+                            window.showMessage(error_code + ": " + error_message)
+                        }
+                    })
+                }
+            )
+                // window.cefQuery({
+                //     request: JSON.stringify(req),
+                //     onSuccess: function(response){
+                //         window.showMessage(response)
+                //     },
+                //     onFailure: function(error_code, error_message){
+                //         window.showMessage(error_code + ": " + error_message)
+                //     }
+                // })
             }
         }, false)
 
@@ -215,15 +275,28 @@ export default {
                 }
             }
 
-            window.cefQuery({
-                request: JSON.stringify(req),
-                onSuccess: function(response){
-                    window.showMessage("Wheel event: " + response)
-                },
-                onFailure: function(error_code, error_message){
-                    window.showMessage(error_code + ": " + error_message)
+            interact(
+                async () => {
+                    window.cefQuery({
+                        request: JSON.stringify(req),
+                        onSuccess: function(response){
+                            window.showMessage(response)
+                        },
+                        onFailure: function(error_code, error_message){
+                            window.showMessage(error_code + ": " + error_message)
+                        }
+                    })
                 }
-            })
+            )
+            // window.cefQuery({
+            //     request: JSON.stringify(req),
+            //     onSuccess: function(response){
+            //         window.showMessage("Wheel event: " + response)
+            //     },
+            //     onFailure: function(error_code, error_message){
+            //         window.showMessage(error_code + ": " + error_message)
+            //     }
+            // })
         }, false)
     }
 }

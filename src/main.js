@@ -18,7 +18,19 @@ window.paint = function(imageBinary) {
         let canvas = document.getElementById("viewer")
         let ctx = canvas.getContext("2d")
 
-        ctx.drawImage(img, 0, 0)
+        // Two canvas are used to avoid the image being blurred
+        let tempCanvas = document.createElement("canvas")
+        tempCanvas.width = canvas.width
+        tempCanvas.height = canvas.height
+        let tempCtx = tempCanvas.getContext("2d")
+
+        tempCtx.imageSmoothingEnabled = true
+
+        tempCtx.drawImage(img, 0, 0)
+        
+        requestAnimationFrame(() => {
+            ctx.drawImage(tempCanvas, 0, 0)
+        })
     }
 }
 
