@@ -5,7 +5,7 @@ import 'element-plus/dist/index.css'
 import zhCn from 'element-plus/dist/locale/zh-cn.mjs'
 import en from 'element-plus/dist/locale/en.mjs'
 import { createStore } from 'vuex'
-import i18n from './assets/language/index.js'
+import i18n from './assets/js/language/index.js'
 
 // Global function
 // Paint image on canvas
