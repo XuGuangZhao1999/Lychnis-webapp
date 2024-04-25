@@ -87,6 +87,7 @@ export default {
         onSuccess: function(response) {
           // Open image success.
           window.showMessage("openImage: " + response);
+          store.commit('core/setBLoaded', true)
         },
         onFailure: function(error_code, error_message) {
           // Open image failed, output error message to statusBar.
