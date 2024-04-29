@@ -127,6 +127,32 @@ export default {
             return modifier
         }
 
+        // Get the key
+        const getKey = function(e) {
+            let keys = {
+                "A": 0,
+                "B": 1,
+                "D": 2,
+                "F": 3,
+                "R": 4,
+                "V": 5,
+                "X": 6,
+                "Z": 7,
+                "ARROWLEFT": 8,
+                "ARROWRIGHT": 9,
+                " ": 10,
+                "HOME": 11,
+                "END": 12,
+                "ARROWUP": 13,
+                "ARROWDOWN": 14,
+                "DELETE": 15,
+                "ESCAPE": 16,
+            }
+            let key = keys[(e.key).toUpperCase()]
+
+            return key
+        }
+
         // Mouse events
         canvas.addEventListener("mousedown", function(e) {
             let req = {
@@ -152,30 +178,6 @@ export default {
                     })
                 }
             )
-            // interactQueue = interactQueue.then(
-            //     () => new Promise((resolve, reject) => {
-            //         window.cefQuery({
-            //             request: JSON.stringify(req),
-            //             onSuccess: function(response){
-            //                 window.showMessage(response)
-            //                 resolve()
-            //             },
-            //             onFailure: function(error_code, error_message){
-            //                 window.showMessage(error_code + ": " + error_message)
-            //                 reject()
-            //             }
-            //         })
-            //     })
-            // )
-            // window.cefQuery({
-            //     request: JSON.stringify(req),
-            //     onSuccess: function(response){
-            //         window.showMessage(response)
-            //     },
-            //     onFailure: function(error_code, error_message){
-            //         window.showMessage(error_code + ": " + error_message)
-            //     }
-            // })
         }, false)
 
         canvas.addEventListener("mouseup", function(e) {
@@ -202,19 +204,9 @@ export default {
                     })
                 }
             )
-            // window.cefQuery({
-            //     request: JSON.stringify(req),
-            //     onSuccess: function(response){
-            //         window.showMessage(response)
-            //     },
-            //     onFailure: function(error_code, error_message){
-            //         window.showMessage(error_code + ": " + error_message)
-            //     }
-            // })
         }, false)
 
         canvas.addEventListener("mousemove", function(e) {
-            if (e.buttons !== 0) {
                 let btn = 0
                 switch (e.buttons) {
                     case 1:
@@ -253,16 +245,6 @@ export default {
                     })
                 }
             )
-                // window.cefQuery({
-                //     request: JSON.stringify(req),
-                //     onSuccess: function(response){
-                //         window.showMessage(response)
-                //     },
-                //     onFailure: function(error_code, error_message){
-                //         window.showMessage(error_code + ": " + error_message)
-                //     }
-                // })
-            }
         }, false)
 
         canvas.addEventListener("wheel", function(e) {
@@ -288,15 +270,56 @@ export default {
                     })
                 }
             )
-            // window.cefQuery({
-            //     request: JSON.stringify(req),
-            //     onSuccess: function(response){
-            //         window.showMessage("Wheel event: " + response)
-            //     },
-            //     onFailure: function(error_code, error_message){
-            //         window.showMessage(error_code + ": " + error_message)
-            //     }
-            // })
+        }, false)
+
+        window.addEventListener("keydown", function(e){
+            let req = {
+                "functionName": "keyPressEvent",
+                "args": {
+                    "key": getKey(e),
+                    "modifier": getModifier(e),
+                    "bAutoRepeat": e.repeat
+                },
+            }
+
+            interact(
+                async () => {
+                    window.cefQuery({
+                        request: JSON.stringify(req),
+                        onSuccess: function(response){
+                            window.showMessage(response)
+                        },
+                        onFailure: function(error_code, error_message){
+                            window.showMessage(error_code + ": " + error_message)
+                        }
+                    })
+                }
+            )
+        }, false)
+        
+        window.addEventListener("keyup", function(e){
+            let req = {
+                "functionName": "keyReleaseEvent",
+                "args": {
+                    "key": getKey(e),
+                    "modifier": getModifier(e),
+                    "bAutoRepeat": e.repeat
+                }
+            }
+
+            interact(
+                async () => {
+                    window.cefQuery({
+                        request: JSON.stringify(req),
+                        onSuccess: function(response){
+                            window.showMessage(response)
+                        },
+                        onFailure: function(error_code, error_message){
+                            window.showMessage(error_code + ": " + error_message)
+                        }
+                    })
+                }
+            )
         }, false)
     }
 }
