@@ -10,21 +10,25 @@
             <canvas id="viewer" class="imageContainer" ref="canvas" width="1600" height="1200"></canvas>
         </div>
         <div v-if="store.state.core.bLoaded" style="display: flex; justify-content: center; background-color: #313131;">
-            <el-slider v-model="currentLevel" @input="resolutionNumberChanged" show-input="true" :debounce="100" :max="store.state.core.levels" size="small"/>
+            <el-slider v-model="currentLevel" show-input :show-input-controls="false" :debounce="100" :max="store.state.core.levels" :min="1" size="small"/>
         </div>
     </div>
 </template>
 
 <script>
-import { ref } from 'vue'
+import { computed, ref, onMounted, onBeforeUnmount } from 'vue'
 import { useStore } from 'vuex'
 
 export default {
     name: 'viewerPanel',
     setup() {
+        const canvas = ref(null)
         const color = ref('rgva(19, 206, 102, 0.8)')
         const store = useStore()
-        const currentLevel = ref(store.state.core.levels - 1)
+        const currentLevel = computed({
+            get: () => store.state.core.currentLevel + 1,
+            set: (value) => store.dispatch('core/updateResolution', value)
+        })
         const lower = ref(store.state.core.constrastRange.lower)
         const upper = ref(store.state.core.constrastRange.upper)
         const channel = ref(0)
@@ -60,62 +64,26 @@ export default {
             updateConstrast()
         }
 
-        // Change the image resolution
-        function resolutionNumberChanged(){
-            let req = {
-                "functionName": "resolutionChange",
-                "args": {
-                    "currentLevel": currentLevel
-                }
-            }
-
-            window.cefQuery({
-                request: JSON.stringify(req),
-                onSuccess: function(response){
-                    window.showMessage("Resolution change: " + response)
-                },
-                onFailure: function(error_code, error_message){
-                    window.showMessage(error_code + ": " + error_message)
-                }
-            }
-            )
-        }
-
-        return {
-            color,
-            store,
-            currentLevel,
-            lower,
-            upper,
-            channel,
-            lHandlerWheel,
-            uHandlerWheel,
-            updateConstrast,
-            resolutionNumberChanged,
-        }
-    },
-    mounted() {
-        let canvas = this.$refs.canvas
-        let ctx = canvas.getContext('2d')
-        ctx.fillStyle = '#000000'
-        ctx.fillRect(0, 0, canvas.width, canvas.height)
-
-        let scaleX = canvas.width / canvas.offsetWidth
-        let scaleY = canvas.height / canvas.offsetHeight
-        
-        // Resize observer
-        let resizeObserver = new ResizeObserver(() => {
-            window.requestAnimationFrame(() => {
-                scaleX = canvas.width / canvas.offsetWidth
-                scaleY = canvas.height / canvas.offsetHeight
-            })
-        });
-        resizeObserver.observe(canvas)
-
         let interactQueue = Promise.resolve()
-        
+            
         function interact(eventHandler) {
             interactQueue = interactQueue.then(eventHandler)
+        }
+
+        function interactEventHandler(req){
+            return new Promise((resolve, reject)=>{
+                        window.cefQuery({
+                            request: JSON.stringify(req),
+                            onSuccess: function(response){
+                                window.showMessage(response)
+                                resolve()
+                            },
+                            onFailure: function(error_code, error_message){
+                                window.showMessage(error_code + ": " + error_message)
+                                reject()
+                            }
+                        })
+                    })
         }
 
         // Get the modifier key
@@ -153,8 +121,7 @@ export default {
             return key
         }
 
-        // Mouse events
-        canvas.addEventListener("mousedown", function(e) {
+        function mouseDownHandler(e, scaleX, scaleY) {
             let req = {
                 "functionName": "mousePressEvent",
                 "args": {
@@ -165,22 +132,10 @@ export default {
                 }
             }
 
-            interact(
-                async () => {
-                    window.cefQuery({
-                        request: JSON.stringify(req),
-                        onSuccess: function(response){
-                            window.showMessage(response)
-                        },
-                        onFailure: function(error_code, error_message){
-                            window.showMessage(error_code + ": " + error_message)
-                        }
-                    })
-                }
-            )
-        }, false)
+            interact(interactEventHandler(req))
+        }
 
-        canvas.addEventListener("mouseup", function(e) {
+        function mouseUpHandler(e, scaleX, scaleY) {
             let req = {
                 "functionName": "mouseReleaseEvent",
                 "args": {
@@ -191,63 +146,39 @@ export default {
                 }
             }
             
-            interact(
-                async () => {
-                    window.cefQuery({
-                        request: JSON.stringify(req),
-                        onSuccess: function(response){
-                            window.showMessage(response)
-                        },
-                        onFailure: function(error_code, error_message){
-                            window.showMessage(error_code + ": " + error_message)
-                        }
-                    })
-                }
-            )
-        }, false)
+            interact(interactEventHandler(req))
+        }
 
-        canvas.addEventListener("mousemove", function(e) {
-                let btn = 0
-                switch (e.buttons) {
-                    case 1:
-                        btn = 0
-                        break
-                    case 2:
-                        btn= 2
-                        break
-                    case 4:
-                        btn = 1
-                        break
-                    default:
-                        btn = 0
-                        break
+        function mouseMoveHandler(e, scaleX, scaleY) {
+            let btn = 0
+            switch (e.buttons) {
+                case 1:
+                    btn = 0
+                    break
+                case 2:
+                    btn= 2
+                    break
+                case 4:
+                    btn = 1
+                    break
+                default:
+                    btn = 0
+                    break
+            }
+            let req = {
+                "functionName": "mouseMoveEvent",
+                "args": {
+                    "button": btn,
+                    "posX": e.offsetX * scaleX, 
+                    "posY": e.offsetY * scaleY,
+                    "modifier": getModifier(e),
                 }
-                let req = {
-                    "functionName": "mouseMoveEvent",
-                    "args": {
-                        "button": btn,
-                        "posX": e.offsetX * scaleX, 
-                        "posY": e.offsetY * scaleY,
-                        "modifier": getModifier(e),
-                    }
-                }
-                
-                interact(
-                async () => {
-                    window.cefQuery({
-                        request: JSON.stringify(req),
-                        onSuccess: function(response){
-                            window.showMessage(response)
-                        },
-                        onFailure: function(error_code, error_message){
-                            window.showMessage(error_code + ": " + error_message)
-                        }
-                    })
-                }
-            )
-        }, false)
+            }
+            
+            interact(interactEventHandler(req))
+        }
 
-        canvas.addEventListener("wheel", function(e) {
+        function wheelHandler(e, scaleX, scaleY) {
             let req = {
                 "functionName": "wheelEvent",
                 "args": {
@@ -257,22 +188,10 @@ export default {
                 }
             }
 
-            interact(
-                async () => {
-                    window.cefQuery({
-                        request: JSON.stringify(req),
-                        onSuccess: function(response){
-                            window.showMessage(response)
-                        },
-                        onFailure: function(error_code, error_message){
-                            window.showMessage(error_code + ": " + error_message)
-                        }
-                    })
-                }
-            )
-        }, false)
+            interact(interactEventHandler(req))
+        }
 
-        window.addEventListener("keydown", function(e){
+        function keyDownHandler(e) {
             let req = {
                 "functionName": "keyPressEvent",
                 "args": {
@@ -282,22 +201,10 @@ export default {
                 },
             }
 
-            interact(
-                async () => {
-                    window.cefQuery({
-                        request: JSON.stringify(req),
-                        onSuccess: function(response){
-                            window.showMessage(response)
-                        },
-                        onFailure: function(error_code, error_message){
-                            window.showMessage(error_code + ": " + error_message)
-                        }
-                    })
-                }
-            )
-        }, false)
-        
-        window.addEventListener("keyup", function(e){
+            interact(interactEventHandler(req))
+        }
+
+        function keyUpHandler(e) {
             let req = {
                 "functionName": "keyReleaseEvent",
                 "args": {
@@ -307,21 +214,63 @@ export default {
                 }
             }
 
-            interact(
-                async () => {
-                    window.cefQuery({
-                        request: JSON.stringify(req),
-                        onSuccess: function(response){
-                            window.showMessage(response)
-                        },
-                        onFailure: function(error_code, error_message){
-                            window.showMessage(error_code + ": " + error_message)
-                        }
-                    })
-                }
-            )
-        }, false)
-    }
+            interact(interactEventHandler(req))
+        }
+
+        onMounted(()=>{
+            let canvasRef = canvas.value
+            let scaleX = canvasRef.width / canvasRef.offsetWidth
+            let scaleY = canvasRef.height / canvasRef.offsetHeight
+            
+            // Resize observer
+            let resizeObserver = new ResizeObserver(() => {
+                window.requestAnimationFrame(() => {
+                    scaleX = canvasRef.width / canvasRef.offsetWidth
+                    scaleY = canvasRef.height / canvasRef.offsetHeight
+                })
+            });
+            resizeObserver.observe(canvasRef)
+
+            // Add Mouse events' listeners
+            canvasRef.addEventListener("mousedown", (e) => { mouseDownHandler(e, scaleX, scaleY) }, false)
+            canvasRef.addEventListener("mouseup", (e) => { mouseUpHandler(e, scaleX, scaleY) }, false)
+            canvasRef.addEventListener("mousemove", (e) => { mouseMoveHandler(e, scaleX, scaleY) }, false)
+            canvasRef.addEventListener("wheel", (e) => { wheelHandler(e, scaleX, scaleY) }, false)
+
+            // Add Keyboard events' listeners
+            window.addEventListener("keydown", keyDownHandler, false)
+            window.addEventListener("keyup", keyUpHandler, false)
+        })
+
+        onBeforeUnmount(()=>{
+            let canvasRef = canvas.value
+            let scaleX = canvasRef.width / canvasRef.offsetWidth
+            let scaleY = canvasRef.height / canvasRef.offsetHeight
+
+            // Remove Mouse events' listeners
+            canvasRef.removeEventListener("mousedown", (e) => { mouseDownHandler(e, scaleX, scaleY) }, false)
+            canvasRef.removeEventListener("mouseup", (e) => { mouseUpHandler(e, scaleX, scaleY) }, false)
+            canvasRef.removeEventListener("mousemove", (e) => { mouseMoveHandler(e, scaleX, scaleY) }, false)
+            canvasRef.removeEventListener("wheel", (e) => { wheelHandler(e, scaleX, scaleY) }, false)
+
+            // Remove Keyboard events' listeners
+            window.removeEventListener("keydown", keyDownHandler, false)
+            window.removeEventListener("keyup", keyUpHandler, false)
+        })
+
+        return {
+            canvas,
+            color,
+            store,
+            currentLevel,
+            lower,
+            upper,
+            channel,
+            lHandlerWheel,
+            uHandlerWheel,
+            updateConstrast,
+        }
+    },
 }
 
 </script>

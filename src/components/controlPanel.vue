@@ -117,4 +117,11 @@ span.el-table__empty-text {
     color: white !important;
 }
 
+input {
+    background-color: #313131;
+    color: white;
+    border: #FFFFFF 1px solid;
+    border-radius: 4px;
+}
+
 </style>
