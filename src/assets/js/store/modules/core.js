@@ -42,7 +42,7 @@ const coreModel = {
         // Set the image resolution information
         setResolution(state, res) {
             state.levels = res.totalResolutions
-            this.setCurrentLevel(res.currentResolution)
+            state.currentLevel = res.currentResolution
         },
         // Set the current level
         setCurrentLevel(state, level) {

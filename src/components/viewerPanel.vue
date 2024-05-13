@@ -68,18 +68,26 @@ export default {
             
         function interact(eventHandler) {
             interactQueue = interactQueue.then(eventHandler)
+            return interactQueue
         }
 
+        let count = -1
+
         function interactEventHandler(req){
+            count++
+            let currentCount = count
             return new Promise((resolve, reject)=>{
+                        console.log("start: " + currentCount)
                         window.cefQuery({
                             request: JSON.stringify(req),
                             onSuccess: function(response){
                                 window.showMessage(response)
+                                console.log("end: " + currentCount)
                                 resolve()
                             },
                             onFailure: function(error_code, error_message){
                                 window.showMessage(error_code + ": " + error_message)
+                                console.log("end: " + currentCount)
                                 reject()
                             }
                         })
