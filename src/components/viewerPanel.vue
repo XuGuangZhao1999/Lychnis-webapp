@@ -2,12 +2,16 @@
 <template>
     <div class="flexLayout">
         <div v-if="store.state.core.bLoaded" class="constrast">
-            <el-color-picker v-model="color" show-alpha/>
             <el-slider v-model="lower" show-input size="small" @wheel="lHandlerWheel" @input="updateConstrast" :debounce="100" :max="upper"/>
             <el-slider v-model="upper" show-input size="small" @wheel="uHandlerWheel" @input="updateConstrast" :debounce="100" :max="65535"/>
         </div>
         <div v-show="store.state.core.bLoaded" class="wrapper">
             <canvas id="viewer" class="imageContainer" ref="canvas" width="1600" height="1200"></canvas>
+            <div class="channelBar">
+                <div class="channel">
+                    <channelColorSelector channel-index="C0" channel-color="#00FF00"></channelColorSelector>
+                </div>
+            </div>
         </div>
         <div v-if="store.state.core.bLoaded" style="display: flex; justify-content: center; background-color: #313131;">
             <el-slider v-model="currentLevel" show-input :show-input-controls="false" :debounce="100" :max="store.state.core.levels" :min="1" size="small"/>
@@ -15,12 +19,16 @@
     </div>
 </template>
 
-<script>
+<script scoped>
 import { computed, ref, onMounted, onBeforeUnmount } from 'vue'
 import { useStore } from 'vuex'
+import channelColorSelector from './UI/channelColorSelector.vue'
 
 export default {
     name: 'viewerPanel',
+    components: {
+        channelColorSelector
+    },
     setup() {
         const canvas = ref(null)
         const color = ref('rgva(19, 206, 102, 0.8)')
@@ -71,23 +79,16 @@ export default {
             return interactQueue
         }
 
-        let count = -1
-
         function interactEventHandler(req){
-            count++
-            let currentCount = count
             return new Promise((resolve, reject)=>{
-                        console.log("start: " + currentCount)
                         window.cefQuery({
                             request: JSON.stringify(req),
                             onSuccess: function(response){
                                 window.showMessage(response)
-                                console.log("end: " + currentCount)
                                 resolve()
                             },
                             onFailure: function(error_code, error_message){
                                 window.showMessage(error_code + ": " + error_message)
-                                console.log("end: " + currentCount)
                                 reject()
                             }
                         })
@@ -306,6 +307,7 @@ div {
 .wrapper {
     width: 100%;
     height: calc(100% - 80px);
+    text-align: center;
 }
 
 .imageContainer {
@@ -331,5 +333,19 @@ div {
     width: 96%;
     height: 40px;
     background-color: #313131;
+}
+
+.channelBar {
+    float: right;
+    width: auto; 
+    margin-top: 1px;
+    margin-right: 1px;
+}
+
+.channel {
+    display: flex; 
+    flex-direction: column; 
+    align-items: end; 
+    width: auto;
 }
 </style>
