@@ -2,14 +2,15 @@
 <template>
     <div class="flexLayout">
         <div v-if="store.state.core.bLoaded" class="constrast">
-            <el-slider v-model="lower" show-input size="small" @wheel="lHandlerWheel" @input="updateConstrast" :debounce="100" :max="upper"/>
-            <el-slider v-model="upper" show-input size="small" @wheel="uHandlerWheel" @input="updateConstrast" :debounce="100" :max="65535"/>
+            <el-slider v-model="lower" show-input size="small" :debounce="100" :max="upper" @wheel="lHandler"/>
+            <el-slider v-model="upper" show-input size="small" :debounce="100" :max="65535" @wheel="uHandler"/>
+            <input type="number" :value="gamma" style="height: auto; width: 20px; text-align: center;" readonly="true"/>
         </div>
         <div v-show="store.state.core.bLoaded" class="wrapper">
             <canvas id="viewer" class="imageContainer" ref="canvas" width="1600" height="1200"></canvas>
             <div class="channelBar">
                 <div class="channel">
-                    <channelColorSelector channel-index="C0" channel-color="#00FF00"></channelColorSelector>
+                    <channelColorSelector v-for="(channel, index) in store.state.core.channels" :key="index" :channel-index="channel.index" :channel-color="rgbToHex(channel.color)" :change-handler="updateColor" :change-visibility="updateVisibility"></channelColorSelector>
                 </div>
             </div>
         </div>
@@ -19,7 +20,7 @@
     </div>
 </template>
 
-<script scoped>
+<script>
 import { computed, ref, onMounted, onBeforeUnmount } from 'vue'
 import { useStore } from 'vuex'
 import channelColorSelector from './UI/channelColorSelector.vue'
@@ -31,45 +32,47 @@ export default {
     },
     setup() {
         const canvas = ref(null)
-        const color = ref('rgva(19, 206, 102, 0.8)')
         const store = useStore()
         const currentLevel = computed({
             get: () => store.state.core.currentLevel + 1,
             set: (value) => store.dispatch('core/updateResolution', value)
         })
-        const lower = ref(store.state.core.constrastRange.lower)
-        const upper = ref(store.state.core.constrastRange.upper)
-        const channel = ref(0)
+        const lower = computed({
+            get: () => store.state.core.constrastRange.lower,
+            set: (value) => {
+                updateConstrast(value, upper.value)
+            }
+        })
+        const upper = computed({
+            get: () => store.state.core.constrastRange.upper,
+            set: (value) => updateConstrast(lower.value, value)
+        })
+        const gamma = computed(()=> store.state.core.channels[0].gamma)
 
         // Update the constrast range
-        function updateConstrast() {
-            store.commit('core/setConstrastRange', {
-                "index": channel.value,
-                "lower": lower.value,
-                "upper": upper.value
+        function updateConstrast(v1, v2) {
+            store.dispatch('core/updateChannelContrast', {
+                "lower": v1,
+                "upper": v2
             })
         }
 
         // Handle the lower slider wheel event
-        function lHandlerWheel(e) {
+        function lHandler(e) {
             if(e.deltaY > 0) {
                 lower.value -= 1
             } else {
                 lower.value += 1
             }
-
-            updateConstrast()
         }
 
         // Handle the upper slider wheel event
-        function uHandlerWheel(e) {
+        function uHandler(e) {
             if(e.deltaY > 0) {
                 upper.value -= 1
             } else {
                 upper.value += 1
             }
-
-            updateConstrast()
         }
 
         let interactQueue = Promise.resolve()
@@ -226,6 +229,31 @@ export default {
             interact(interactEventHandler(req))
         }
 
+        function rgbToHex(color) {
+            let rgbArray = color.split(' ').map(Number)
+            let hex = rgbArray.map(x => {
+                let hex = (x * 255).toString(16);
+                return hex.length === 1 ? '0' + hex : hex;
+            });
+            // rgb->bgr
+            [hex[0], hex[2]] = [hex[2] , hex[0]]
+            return '#' + hex.join('');
+        }
+
+        function updateColor(index, color) {
+            store.dispatch('core/updateChannelColor', {
+                "index": index,
+                "color": color
+            })
+        }
+        
+        function updateVisibility(index, visibility) {
+            store.dispatch('core/updateChannelVisibility', {
+                "index": index,
+                "visible": visibility
+            })
+        }
+
         onMounted(()=>{
             let canvasRef = canvas.value
             let scaleX = canvasRef.width / canvasRef.offsetWidth
@@ -268,16 +296,18 @@ export default {
         })
 
         return {
+            gamma,
             canvas,
-            color,
             store,
             currentLevel,
             lower,
             upper,
-            channel,
-            lHandlerWheel,
-            uHandlerWheel,
+            lHandler,
+            uHandler,
             updateConstrast,
+            rgbToHex,
+            updateColor,
+            updateVisibility,
         }
     },
 }
@@ -347,5 +377,12 @@ div {
     flex-direction: column; 
     align-items: end; 
     width: auto;
+}
+
+/* Remove the input spinner */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
 }
 </style>

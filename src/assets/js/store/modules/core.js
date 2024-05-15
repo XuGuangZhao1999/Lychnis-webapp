@@ -24,6 +24,7 @@ const coreModel = {
                 "width": 256,
                 "height": 256,
             },
+            channels: [],
         }
     },
     mutations: {
@@ -48,30 +49,6 @@ const coreModel = {
         setCurrentLevel(state, level) {
             state.currentLevel = level
         },
-        // Set the constrast range
-        setConstrastRange(state, range) {
-            state.constrastRange.lower = range.lower
-            state.constrastRange.upper = range.upper
-
-            let req = {
-                "functionName": "constrastChanged",
-                "args": {
-                    "index": range.index,
-                    "v1": state.constrastRange.lower,
-                    "v2": state.constrastRange.upper
-                }
-            }
-
-            window.cefQuery({
-                request: JSON.stringify(req),
-                onSuccess: function(response){
-                    window.showMessage("constrast change: " + response)
-                },
-                onFailure: function(error_code, error_message){
-                    window.showMessage(error_code + ": " + error_message)
-                }
-            })
-        },
         // Set the center of the volume
         setCenter(state, center) {
             state.center.x = center.x
@@ -82,6 +59,26 @@ const coreModel = {
         setBlockSize(state, blockSize) {
             state.blockSize.width = blockSize.width
             state.blockSize.height = blockSize.height
+        },
+        // Set the channels
+        setChannels(state, channels){
+            state.channels = channels
+        },
+        // Set the channel color
+        setChannelColor(state, channel){
+            state.channels[channel.index].color = channel.color
+        },
+        // Set the channel visibility
+        setChannelVisibility(state, channel){
+            state.channels[channel.index].visible = channel.visible
+        },
+        // Set the channel contrast
+        setChannelContrast(state, range){
+            for(let it of state.channels){
+                it.contrast = range.lower + " " + range.upper
+            }
+            state.constrastRange.lower = range.lower
+            state.constrastRange.upper = range.upper
         },
     },
     actions: {
@@ -147,7 +144,87 @@ const coreModel = {
                 }
             }
             )
-        }
+        },
+        updateChannelColor(context, channel){
+            console.log(channel)
+            if(context.state.bLoaded == false) return
+
+            function hexToRgb(hex) {
+                let b = parseInt(hex.substring(1, 3), 16);
+                let g = parseInt(hex.substring(3, 5), 16);
+                let r = parseInt(hex.substring(5, 7), 16);
+
+                return [r, g, b];
+            }
+
+            let rgb = hexToRgb(channel.color)
+            let req = {
+                "functionName": "updateChannelColor",
+                "args": {
+                    "index": channel.index,
+                    "r": rgb[0],
+                    "g": rgb[1],
+                    "b": rgb[2],
+                    "gamma": context.state.channels[channel.index].gamma
+                }
+            }
+
+            window.cefQuery({
+                request: JSON.stringify(req),
+                onSuccess: function(response){
+                    window.showMessage("Channel color change: " + response)
+                    context.commit('setChannelColor', {"index": channel.index, "color": (rgb[0]/255)+" "+(rgb[1]/255)+" "+(rgb[2]/255)})
+                },
+                onFailure: function(error_code, error_message){
+                    window.showMessage(error_code + ": " + error_message)
+                }
+            }
+            )
+        },
+        updateChannelVisibility(context, channel){
+            if(context.state.bLoaded == false) return
+            let req = {
+                "functionName": "updateChannelVisibility",
+                "args": {
+                    "index": channel.index,
+                    "visible": channel.visible
+                }
+            }
+
+            window.cefQuery({
+                request: JSON.stringify(req),
+                onSuccess: function(response){
+                    window.showMessage("Channel visibility change: " + response)
+                    context.commit('setChannelVisibility', {"index": channel.index, "visible": channel.visible})
+                },
+                onFailure: function(error_code, error_message){
+                    window.showMessage(error_code + ": " + error_message)
+                }
+            }
+            )
+        },
+        updateChannelContrast(context, range){
+            if(context.state.bLoaded == false) return
+            let req = {
+                "functionName": "updateChannelContrast",
+                "args": {
+                    "lower": range.lower,
+                    "upper": range.upper
+                }
+            }
+
+            window.cefQuery({
+                request: JSON.stringify(req),
+                onSuccess: function(response){
+                    window.showMessage("Channel contrast change: " + response)
+                    context.commit('setChannelContrast', range)
+                },
+                onFailure: function(error_code, error_message){
+                    window.showMessage(error_code + ": " + error_message)
+                }
+            }
+            )
+        },
     },
     getters: {
         locale(state) {
