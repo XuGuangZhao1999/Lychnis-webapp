@@ -11,7 +11,7 @@ const coreModel = {
             bLoaded: false,
             levels: 1,
             currentLevel: 0,
-            constrastRange: {
+            contrastRange: {
                 "lower": 100,
                 "upper": 1000,
             },
@@ -77,8 +77,8 @@ const coreModel = {
             for(let it of state.channels){
                 it.contrast = range.lower + " " + range.upper
             }
-            state.constrastRange.lower = range.lower
-            state.constrastRange.upper = range.upper
+            state.contrastRange.lower = range.lower
+            state.contrastRange.upper = range.upper
         },
     },
     actions: {

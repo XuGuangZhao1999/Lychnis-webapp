@@ -38,19 +38,19 @@ export default {
             set: (value) => store.dispatch('core/updateResolution', value)
         })
         const lower = computed({
-            get: () => store.state.core.constrastRange.lower,
+            get: () => store.state.core.contrastRange.lower,
             set: (value) => {
-                updateConstrast(value, upper.value)
+                updateContrast(value, upper.value)
             }
         })
         const upper = computed({
-            get: () => store.state.core.constrastRange.upper,
-            set: (value) => updateConstrast(lower.value, value)
+            get: () => store.state.core.contrastRange.upper,
+            set: (value) => updateContrast(lower.value, value)
         })
         const gamma = computed(()=> store.state.core.channels[0].gamma)
 
-        // Update the constrast range
-        function updateConstrast(v1, v2) {
+        // Update the contrast range
+        function updateContrast(v1, v2) {
             store.dispatch('core/updateChannelContrast', {
                 "lower": v1,
                 "upper": v2
@@ -75,6 +75,7 @@ export default {
             }
         }
 
+        // Promise queue
         let interactQueue = Promise.resolve()
             
         function interact(eventHandler) {
@@ -133,6 +134,7 @@ export default {
             return key
         }
 
+        // Mouse event handlers
         function mouseDownHandler(e, scaleX, scaleY) {
             let req = {
                 "functionName": "mousePressEvent",
@@ -203,6 +205,7 @@ export default {
             interact(interactEventHandler(req))
         }
 
+        // Key event handlers
         function keyDownHandler(e) {
             let req = {
                 "functionName": "keyPressEvent",
@@ -304,7 +307,6 @@ export default {
             upper,
             lHandler,
             uHandler,
-            updateConstrast,
             rgbToHex,
             updateColor,
             updateVisibility,
